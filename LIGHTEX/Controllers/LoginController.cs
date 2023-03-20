@@ -47,18 +47,30 @@ namespace LIGHTEX.Controllers
             {
                 // kiểm tra thông tin đăng nhập được cung cấp cho đúng hay không
                 var account = await _context.Account
-                    .Where(a => a.username == login.username && a.password == login.password && a.active == true && a.permission == 0)
+                    .Where(a => a.username == login.username && a.password == login.password && a.password != "Account Google" && a.active == true && a.permission == 0)
                     .FirstOrDefaultAsync();
                 var admin = await _context.Account
-                   .Where(a => a.username == login.username && a.password == login.password && a.active == true && a.permission == 1)
+                   .Where(a => a.username == login.username && a.password == login.password && a.password != "Account Google" && a.active == true && a.permission == 1)
                    .FirstOrDefaultAsync();
-                if (account == null && admin == null)
+                var accountGoogle = await _context.Account
+                    .Where(a => a.username == login.username && a.password == login.password && a.password == "Account Google" && a.active == true && a.permission == 0)
+                    .FirstOrDefaultAsync();
+                var adminGoogle = await _context.Account
+                   .Where(a => a.username == login.username && a.password == login.password && a.password == "Account Google" && a.active == true && a.permission == 1)
+                   .FirstOrDefaultAsync();
+                if (accountGoogle != null || adminGoogle != null)
+                {
+                    // thông tin xác thực sai, trả về một thông báo lỗi
+                    ViewBag.ErrorMessage = "Vui lòng đăng nhập bằng biểu tượng Google.";
+                    return View("Index");
+                }
+                else if (account == null && admin == null)
                 {
                     // thông tin xác thực sai, trả về một thông báo lỗi
                     ViewBag.ErrorMessage = "Tài khoản không tồn tại.";
-                    return View();
+                    return View("Index");
                 }
-                else if (account != null)
+                else if (account != null && accountGoogle == null)
                 {
                     // thông tin xác thực đúng, đăng nhập người dùng
                     var claims = new List<Claim>
@@ -68,14 +80,12 @@ namespace LIGHTEX.Controllers
                     };
                     var claimsIdentity = new ClaimsIdentity(
                         claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
                     var authProperties = new AuthenticationProperties
                     {
                         IsPersistent = true,
                         ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
                         AllowRefresh = true,
                     };
-
                     await _httpContextAccessor.HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity),
@@ -86,7 +96,7 @@ namespace LIGHTEX.Controllers
                     // chuyển hướng đến trang chính
                     return RedirectToAction("Index", "Home");
                 }
-                else if (admin != null)
+                else if (admin != null && adminGoogle == null)
                 {
                     // thông tin xác thực đúng, đăng nhập người dùng
                     var claims = new List<Claim>
@@ -114,9 +124,10 @@ namespace LIGHTEX.Controllers
                     // chuyển hướng đến trang quản trị
                     return RedirectToAction("Index", "Admin");
                 }
-                else { return View(); }
+                else { return View("Index"); }
             }
         }
+        [HttpPost]
         public async Task LoginGoogle()
         {
             await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties()
@@ -124,6 +135,7 @@ namespace LIGHTEX.Controllers
                 RedirectUri = Url.Action("GoogleResponse")
             });
         }
+        [HttpPost]
         public async Task<IActionResult> GoogleResponse()
         {
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -208,7 +220,7 @@ namespace LIGHTEX.Controllers
                 // chuyển hướng đến trang quản trị
                 return RedirectToAction("Index", "Admin");
             }
-            else { return View(); }
+            else { return View("Index"); }
         }
         [HttpPost]
         [Authorize]

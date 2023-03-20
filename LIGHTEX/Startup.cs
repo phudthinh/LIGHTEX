@@ -38,6 +38,8 @@ namespace LIGHTEX
                     options.LoginPath = "/Login/Login";
                     options.LogoutPath = "/Login/Logout";
                     options.AccessDeniedPath = "/Home/AccessDenied";
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.SameSite = SameSiteMode.Strict;
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
                     options.SlidingExpiration = true;
                 })

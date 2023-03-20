@@ -36,17 +36,17 @@ namespace LIGHTEX.Controllers
             if (string.IsNullOrWhiteSpace(register.username))
             {
                 ViewBag.ErrorMessage = "Tài khoản không được để trống.";
-                return View();
+                return View("Index");
             }
             else if (string.IsNullOrWhiteSpace(register.password))
             {
                 ViewBag.ErrorMessage = "Mật khẩu không được để trống.";
-                return View();
+                return View("Index");
             }
             else if (string.IsNullOrWhiteSpace(register.full_name))
             {
                 ViewBag.ErrorMessage = "Tên của bạn không được để trống.";
-                return View();
+                return View("Index");
             }
             else
             {
@@ -55,7 +55,7 @@ namespace LIGHTEX.Controllers
                 if (existingUser != null)
                 {
                     ViewBag.ErrorMessage = "Tài khoản này đã được sử dụng.";
-                    return View();
+                    return View("Index");
                 }
                 else
                 {
@@ -88,6 +88,7 @@ namespace LIGHTEX.Controllers
                 }
             }
         }
+        [HttpPost]
         public async Task RegisterGoogle()
         {
             await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties()
@@ -95,6 +96,7 @@ namespace LIGHTEX.Controllers
                 RedirectUri = Url.Action("GoogleResponse")
             });
         }
+        [HttpPost]
         public async Task<IActionResult> GoogleResponse()
         {
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -125,7 +127,7 @@ namespace LIGHTEX.Controllers
             if (existingUser != null)
             {
                 ViewBag.ErrorMessage = "Tài khoản này đã được sử dụng.";
-                return View();
+                return View("Index");
             }
             else
             {
