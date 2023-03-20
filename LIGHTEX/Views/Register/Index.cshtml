@@ -1,0 +1,64 @@
+﻿@model LIGHTEX.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Đăng ký";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+<div class="flex justify-center">
+    <div class="h-[90%] w-full md:w-3/4 m-4">
+        <div class="text-xl flex flex-col justify-center items-center mt-5 md:mt-0">
+            <div class="mt-5 md:mt-20 hover:scale-125 hover:cursor-pointer transition-all">
+                <a asp-area="" asp-controller="Home" asp-action="Index">
+                    <img class="w-atuo h-20" src="~/assets/logo.png" />
+                </a>
+            </div>
+            <h1 class="font-semibold text-3xl text[#333333] mt-6">Đăng ký</h1>
+            <div class="flex mt-4">
+                <a asp-area="" asp-controller="Register" asp-action="RegisterGoogle">
+                    <ion-icon name="logo-google"
+                              class="py-2 rounded px-4 border-2 m-1 cursor-pointer border-[#FF6827] text-white bg-[#FF6827] hover:bg-white hover:text-[#FF6827] text-2xl">
+                    </ion-icon>
+                </a>
+                <ion-icon name="logo-facebook"
+                          class="py-2 rounded px-4 border-2 m-1 cursor-pointer border-[#3A559F] bg-[#3A559F] text-white hover:bg-white hover:text-[#3A559F] text-2xl">
+                </ion-icon>
+            </div>
+            <div class="text-[#333333] font-semibold mt-5">hoặc</div>
+        </div>
+        <form method="post" action="@Url.Action("Register", "Register")">
+            <div class="flex flex-col justify-center items-center mt-5">
+                <div class="mt-3">
+                    <input type="text" placeholder="Tài khoản" asp-for="username"
+                           class=" bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold md:w-72 lg:w-[340px]">
+                </div>
+                <div class="mt-3">
+                    <input type="password" placeholder="Mật khẩu" asp-for="password"
+                           class=" bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold md:w-72 lg:w-[340px]">
+                </div>
+                <div class="mt-3">
+                    <input type="text" placeholder="Tên của bạn" asp-for="full_name"
+                           class=" bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold md:w-72 lg:w-[340px]">
+                </div>
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <p class="mt-4 text-[#FF0000]">@ViewBag.ErrorMessage</p>
+                }
+            </div>
+            <div class="text-center mt-7">
+                <button type="submit" class="uppercase px-24 md:px-[118px] lg:px-[140px] py-2 rounded-md text-white bg-[#FF6827] hover:bg-[#FF6827] font-medium">
+                    Đăng ký
+                </button>
+            </div>
+        </form>
+        <div class="text-center my-6 flex flex-col">
+            <a href="#" class="text-sm font-medium text-[#333333] hover:text-[#FF6827] m-1">
+                Quên mật khẩu?
+            </a>
+            <a asp-area="" asp-controller="Login" asp-action="Index" class="text-sm font-bold text-[#333333] hover:text-[#FF6827] m-1">
+                Bạn đã có tài khoản? Đăng nhập ngay
+            </a>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

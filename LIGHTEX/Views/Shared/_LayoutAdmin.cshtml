@@ -1,0 +1,79 @@
+﻿@using Microsoft.AspNetCore.Authentication.Cookies
+@using System.Security.Claims
+@using LIGHTEX.Data
+@using Microsoft.AspNetCore.Http
+@using System.Diagnostics;
+@using System.Linq;
+@using Microsoft.EntityFrameworkCore;
+
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var context = HttpContextAccessor?.HttpContext?.RequestServices.GetService(typeof(LIGHTEXContext)) as LIGHTEXContext;
+    var username = HttpContextAccessor?.HttpContext?.User?.Identity?.Name;
+    var admin = await context.Account.FirstOrDefaultAsync(c => c.username == username);
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lightex</title>
+    <link rel="icon" href="~/assets/logo.png">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="drop-shadow w-full h-16 bg-white">
+        <div class="container mx-auto px-4 flex justify-between h-16">
+            <div class="flex items-center">
+                <a asp-area="" asp-controller="Home" asp-action="Index">
+                    <div class="flex items-center justify-center">
+                        <img class="w-atuo h-10" src="~/assets/logo.png" />
+                        <p class="text-3xl text-black font-semibold mx-2 hidden md:block">LIGHTEX</p>
+                    </div>
+                </a>
+            </div>
+            <div class="flex items-center">
+               @{
+                    <p>Xin chào, <b>@admin.full_name</b></p>
+                }
+            </div>
+        </div>
+    </header>
+    <div class="container mx-auto px-4">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="drop-shadow w-full h-16 bg-white fixed bottom-0">
+        <div class="container mx-auto px-4 flex items-center justify-center h-full w-full">
+            @{
+                var year = DateTime.Now.Year;
+            }
+            <p>© @year PhuThinh. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        document.getElementById("logout-link").addEventListener("click", function (e) {
+            e.preventDefault(); // Ngăn chặn trang chuyển hướng khi nhấn vào thẻ <a>
+            logout();
+        });
+
+        function logout() {
+            fetch('/Login/Logout', { method: 'POST' })
+                .then(function (response) {
+                    if (response.redirected) {
+                        window.location.href = response.url; // Chuyển hướng đến trang Login
+                    }
+                });
+        }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
