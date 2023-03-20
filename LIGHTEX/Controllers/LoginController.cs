@@ -92,8 +92,8 @@ namespace LIGHTEX.Controllers
                     authProperties);
 
                     CurrentUser = account;
-
-                    // chuyển hướng đến trang chính
+                    account.last_login = DateTime.Now;
+                    await _context.SaveChangesAsync();
                     return RedirectToAction("Index", "Home");
                 }
                 else if (admin != null && adminGoogle == null)
@@ -120,8 +120,8 @@ namespace LIGHTEX.Controllers
                     authProperties);
 
                     CurrentUser = admin;
-
-                    // chuyển hướng đến trang quản trị
+                    admin.last_login = DateTime.Now;
+                    await _context.SaveChangesAsync();
                     return RedirectToAction("Index", "Admin");
                 }
                 else { return View("Index"); }
@@ -188,8 +188,8 @@ namespace LIGHTEX.Controllers
                 authProperties);
 
                 CurrentUser = account;
-
-                // chuyển hướng đến trang chính
+                account.last_login = DateTime.Now;
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
             }
             else if (admin != null)
@@ -216,8 +216,8 @@ namespace LIGHTEX.Controllers
                 authProperties);
 
                 CurrentUser = admin;
-
-                // chuyển hướng đến trang quản trị
+                admin.last_login = DateTime.Now;
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Admin");
             }
             else { return View("Index"); }
