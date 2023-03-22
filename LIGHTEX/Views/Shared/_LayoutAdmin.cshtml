@@ -55,10 +55,10 @@
             <p>© @year PhuThinh. All rights reserved.</p>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
+        if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+            location.reload(true);
+        }
         document.getElementById("logout-link").addEventListener("click", function (e) {
             e.preventDefault(); // Ngăn chặn trang chuyển hướng khi nhấn vào thẻ <a>
             logout();

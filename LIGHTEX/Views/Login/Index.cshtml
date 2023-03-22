@@ -1,7 +1,19 @@
-﻿@model LIGHTEX.Models.RegisterViewModel
+﻿@using Microsoft.AspNetCore.Authentication.Cookies
+@using System.Security.Claims
+@using LIGHTEX.Data
+@using Microsoft.AspNetCore.Http
+@using System.Diagnostics;
+@using System.Linq;
+@using Microsoft.EntityFrameworkCore;
+
+@inject IHttpContextAccessor HttpContextAccessor
+@model LIGHTEX.Models.RegisterViewModel
 @{
     ViewBag.Title = "Đăng nhập";
     Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    var context = HttpContextAccessor?.HttpContext?.RequestServices.GetService(typeof(LIGHTEXContext)) as LIGHTEXContext;
+    var username = HttpContextAccessor?.HttpContext?.User?.Identity?.Name;
+    var account = await context.Account.FirstOrDefaultAsync(c => c.username == username);
 }
 <div class="flex justify-center">
     <div class="h-[90%] w-full md:w-3/4 m-4">
@@ -13,14 +25,30 @@
             </div>
             <h1 class="font-semibold text-3xl text[#333333] mt-6">Đăng nhập</h1>
             <div class="flex mt-4">
-                <a asp-area="" asp-controller="Login" asp-action="LoginGoogle">
-                    <ion-icon name="logo-google"
-                              class="py-2 rounded px-4 border-2 m-1 cursor-pointer border-[#FF6827] text-white bg-[#FF6827] hover:bg-white hover:text-[#FF6827] text-2xl">
-                    </ion-icon>
-                </a>
-                <ion-icon name="logo-facebook"
-                          class="py-2 rounded px-4 border-2 m-1 cursor-pointer border-[#3A559F] bg-[#3A559F] text-white hover:bg-white hover:text-[#3A559F] text-2xl">
-                </ion-icon>
+                @{
+                    if (account == null)
+                    {
+                        <a asp-area="" asp-controller="Login" asp-action="LoginGoogle">
+                            <ion-icon name="logo-google"
+                                  class="py-2 rounded px-4 border-2 m-1 cursor-pointer border-[#FF6827] text-white bg-[#FF6827] hover:bg-white hover:text-[#FF6827] text-2xl">
+                            </ion-icon>
+                        </a>
+                        <a asp-area="" asp-controller="Login" asp-action="LoginFacebook">
+                            <ion-icon name="logo-facebook"
+                                  class="py-2 rounded px-4 border-2 m-1 cursor-pointer border-[#3A559F] bg-[#3A559F] text-white hover:bg-white hover:text-[#3A559F] text-2xl">
+                            </ion-icon>
+                        </a>
+                    }
+                    else
+                    {
+                        <ion-icon name="logo-google"
+                                class="py-2 rounded px-4 border-2 m-1 cursor-default border-[#333333] text-white bg-[#333333] hover:bg-white hover:text-[#333333] text-2xl">
+                        </ion-icon>
+                        <ion-icon name="logo-facebook"
+                              class="py-2 rounded px-4 border-2 m-1 cursor-default border-[#333333] bg-[#333333] text-white hover:bg-white hover:text-[#333333] text-2xl">
+                        </ion-icon>
+                    }
+                }
             </div>
             <div class="text-[#333333] font-semibold mt-5">hoặc</div>
         </div>
@@ -40,9 +68,21 @@
                 }
             </div>
             <div class="text-center mt-7">
-                <button type="submit" class="uppercase px-24 md:px-[118px] lg:px-[140px] py-2 rounded-md text-white bg-[#FF6827] hover:bg-[#FF6827] font-medium">
-                    Đăng nhập
-                </button>
+                @{
+                    if (account == null)
+                    {
+                        <button type="submit" class="uppercase px-24 md:px-[118px] lg:px-[140px] py-2 rounded-md text-white bg-[#FF6827] hover:bg-[#FF6827] font-medium">
+                            Đăng nhập
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="uppercase px-24 md:px-[118px] lg:px-[140px] py-2 rounded-md text-white bg-[#333333] hover:bg-[#333333] font-medium pointer-events-none">
+                            Bạn đã đăng nhập
+                        </button>
+                    }
+                }
+
             </div>
         </form>
         <div class="text-center my-6 flex flex-col">
@@ -55,6 +95,10 @@
         </div>
     </div>
 </div>
-
+<script>
+    if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+        location.reload(true);
+    }
+</script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

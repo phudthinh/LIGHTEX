@@ -83,3 +83,6 @@ F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\bin\Debug\net7.0\Microsoft.Extensions.Identity.S
 F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
 F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\obj\Debug\net7.0\scopedcss\Views\Shared\_LayoutAdmin.cshtml.rz.scp.css
 F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.Google.dll
+F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\bin\Debug\net7.0\Facebook.dll
+F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.Facebook.dll
+F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\bin\Debug\net7.0\Newtonsoft.Json.dll
