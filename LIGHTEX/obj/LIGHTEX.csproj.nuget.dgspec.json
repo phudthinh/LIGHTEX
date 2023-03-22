@@ -44,6 +44,10 @@
               "target": "Package",
               "version": "[7.0.6, )"
             },
+            "MailKit": {
+              "target": "Package",
+              "version": "[3.6.0, )"
+            },
             "Microsoft.AspNetCore.Authentication.Cookies": {
               "target": "Package",
               "version": "[2.2.0, )"
@@ -69,10 +73,6 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.4, )"
-            },
-            "Newtonsoft.Json": {
-              "target": "Package",
-              "version": "[13.0.3, )"
             }
           },
           "imports": [

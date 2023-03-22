@@ -46,7 +46,6 @@ namespace LIGHTEX.Controllers
         {
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel login)
         {
@@ -272,7 +271,6 @@ namespace LIGHTEX.Controllers
                 return new Uri(requestUrl + callbackUrl);
             }
         }
-
         public async Task<IActionResult> LoginFacebook()
         {
             var fb = new FacebookClient();

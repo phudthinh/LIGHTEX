@@ -85,4 +85,6 @@ F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\obj\Debug\net7.0\scopedcss\Views\Shared\_LayoutA
 F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.Google.dll
 F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\bin\Debug\net7.0\Facebook.dll
 F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.Facebook.dll
-F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\bin\Debug\net7.0\Newtonsoft.Json.dll
+F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\bin\Debug\net7.0\MailKit.dll
+F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\bin\Debug\net7.0\MimeKit.dll
+F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\bin\Debug\net7.0\BouncyCastle.Crypto.dll
