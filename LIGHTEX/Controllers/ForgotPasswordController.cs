@@ -37,22 +37,27 @@ namespace LIGHTEX.Controllers
                 var account = await _context.Account
                     .Where(a => a.username == login.username && a.active == true && a.permission == 0)
                     .FirstOrDefaultAsync();
+                var customer = await _context.Customer
+                    .Where(a => a.username == login.username)
+                    .FirstOrDefaultAsync();
                 if (account == null)
                 {
                     ViewBag.ErrorMessage = "Tài khoản không tồn tại.";
                     return View("Index");
                 }
+                else if (string.IsNullOrWhiteSpace(customer.email))
+                {
+                    ViewBag.ErrorMessage = "Tài khoản không có địa chỉ email để khôi phục. Vui lòng liên hệ nhà phát triển";
+                    return View("Index");
+                }
                 else
                 {
-                    var customer = await _context.Customer
-                    .Where(a => a.username == login.username)
-                    .FirstOrDefaultAsync();
                     HttpContext.Session.SetString("CustomerEmail", customer.email);
                     var customerEmail = HttpContext.Session.GetString("CustomerEmail");
                     ViewBag.CustomerEmail = customerEmail;
                     var emailService = new EmailService();
                     var callbackUrl = Url.Action("Index", "ChangePassword", new { username = customer.username }, protocol: Request.Scheme);
-                    var emailBody = $"Chúng tôi đã nhận được yêu cầu thay đổi mật khẩu của bạn. Vui lòng nhấn vào liên kết để đổi mật khẩu: <a href='{callbackUrl}'>Đổi mật khẩu</a>"; 
+                    var emailBody = $"Chúng tôi đã nhận được yêu cầu thay đổi mật khẩu của bạn. Vui lòng nhấn vào liên kết để đổi mật khẩu: <a href='{callbackUrl}'>Đổi mật khẩu</a>";
                     await emailService.SendEmailAsync(customer.email, "Xác nhận đổi mật khẩu Lightex của bạn", emailBody);
                     return View("Index");
                 }
