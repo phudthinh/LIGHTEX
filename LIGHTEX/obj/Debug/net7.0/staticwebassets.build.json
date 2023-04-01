@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ipqHAyF7ZW8wXPC7hju6yU3/3/2LV+WnciVUrM/GE7E=",
+  "Hash": "+sYLEeYVYajybZfrRfm7q03gLQxfP5+HMxOqxQ+Q77w=",
   "Source": "LIGHTEX",
   "BasePath": "_content/LIGHTEX",
   "Mode": "Default",
@@ -49,6 +49,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\LIGHTEX.bundle.scp.css"
+    },
+    {
+      "Identity": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\wwwroot\\assets\\iconDefault.png",
+      "SourceId": "LIGHTEX",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\wwwroot\\",
+      "BasePath": "_content/LIGHTEX",
+      "RelativePath": "assets/iconDefault.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\assets\\iconDefault.png"
     },
     {
       "Identity": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\wwwroot\\assets\\logo.png",

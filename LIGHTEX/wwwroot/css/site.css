@@ -126,10 +126,26 @@ input:-webkit-autofill:focus {
 .icon:focus ~ .input__search,
 .input__search:focus {
     box-shadow: none;
-    width: 200px;
+    width: 160px;
     border-radius: 50px;
     box-shadow: 0px 0px 3px;
     transition: all 500ms cubic-bezier(0, 0.110, 0.35, 2);
+}
+
+.icon[disabled] {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+.input__search:focus + .icon {
+    pointer-events: all;
+}
+
+.input__search:not(:focus) + .icon {
+    pointer-events: none;
+}
+
+.input__search:focus + .icon[disabled] {
+    pointer-events: none;
 }
 
 .input__search:focus ~ .history {

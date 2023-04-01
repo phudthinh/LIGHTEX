@@ -19,10 +19,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lightex</title>
+    <title>Lightex - @ViewBag.Title</title>
     <link rel="icon" href="~/assets/logo.png">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <header class="drop-shadow w-full h-16 bg-white">
@@ -231,7 +232,7 @@
                                 }
                             }
                             <div class="flex w-full px-4 py-2 hover:bg-[#cccccc] first:rounded-t-lg last:rounded-b-lg">
-                                <a id="logout-link" href="#" class="hover:cursor-pointer w-full">
+                                <a id="logout-link" class="hover:cursor-pointer w-full">
                                     <p class="text-right w-full text-[#FF6827]">Đăng xuất</p>
                                 </a>
                             </div>

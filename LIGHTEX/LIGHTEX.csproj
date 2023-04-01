@@ -13,6 +13,10 @@
     <None Remove="wwwroot\NewFolder1\**" />
   
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Views\Admin\Customer.cshtml~RF362d2aa7.TMP" />
+  </ItemGroup>
 	
     <ItemGroup>
       <UpToDateCheckBuilt Include="wwwroot/css/site.css" Set="Css" />

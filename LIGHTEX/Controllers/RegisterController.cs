@@ -199,10 +199,7 @@ namespace LIGHTEX.Controllers
             var accesstoken = result.access_token;
             fb.AccessToken = accesstoken;
             dynamic data = fb.Get("me?fields=link,first_name,last_name,email,picture");
-            TempData["email"] = data.email;
-            TempData["name"] = data.first_name + " " + data.last_name;
-            TempData["picture"] = data.picture.data.url;
-            string nameCustomer = data.email;
+            string nameCustomer = data.first_name + " " + data.last_name;
             string emailCustomer = data.email;
             string avatarCustomerUrl = data.picture.data.url;
             var httpClient = new HttpClient();

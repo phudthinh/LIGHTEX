@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\LIGHTEX.bundle.scp.css"
     },
     {
+      "Id": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\wwwroot\\assets\\iconDefault.png",
+      "PackagePath": "staticwebassets\\assets\\iconDefault.png"
+    },
+    {
       "Id": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\wwwroot\\assets\\logo.png",
       "PackagePath": "staticwebassets\\assets\\logo.png"
     },

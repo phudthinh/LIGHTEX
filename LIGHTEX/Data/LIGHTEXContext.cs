@@ -17,5 +17,6 @@ namespace LIGHTEX.Data
 
         public DbSet<Account> Account { get; set; }
         public DbSet<Customer> Customer { get; set; }
+        public DbSet<Category> Category { get; set; }
     }
 }

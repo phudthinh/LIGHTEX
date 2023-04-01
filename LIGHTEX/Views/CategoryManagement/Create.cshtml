@@ -1,0 +1,74 @@
+﻿@model LIGHTEX.Models.Category;
+@{
+    ViewBag.Title = "Tạo loại sản phẩm";
+    Layout = "_LayoutAdmin";
+
+}
+<body>
+    <div class="text-xl flex flex-col justify-center items-center mt-5 md:mt-0 relative">
+        <a class="w-12 h-12 p-3 md:hover:-translate-x-4 hover:cursor-pointer transition-all absolute top-0 left-0" asp-area="" asp-controller="CustomerManagement" asp-action="Index">
+            <svg class="fill-[#333333] w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58.08 35.27">
+                <path d="M275.89,418.65h48.44a2.16,2.16,0,1,1,0,4.31H275.38l12.5,11.76a2.13,2.13,0,0,1,.09,3,2.16,2.16,0,0,1-3,.11L269.09,423a2.2,2.2,0,0,1-.68-1.7,2.15,2.15,0,0,1,.59-1.59l14.88-15.85A2.15,2.15,0,0,1,287,406.8Z" transform="translate(-268.4 -403.17)" />
+            </svg>
+        </a>
+        <div class="relative group flex justify-center items-center w-36 h-36 lg:hover:scale-125 transition-all hidden" id="image-preview-container">
+            <img class="lg:group-hover:invert w-24 h-24 transition-all z-20 object-cover" id="image-preview" alt="Icon" />
+            <div class="absolute bg-transparent w-32 h-32 rounded-lg lg:group-hover:bg-[#FF6827] z-10 transition-all"></div>
+        </div>
+        <div class="relative group flex justify-center items-center w-36 h-36 lg:hover:scale-125 transition-all block" id="image-default-container">
+            <img class="lg:group-hover:invert w-24 h-24 transition-all z-20 object-cover" id="image-preview" alt="Icon" src="~/assets/iconDefault.png" />
+            <div class="absolute bg-transparent w-32 h-32 rounded-lg lg:group-hover:bg-[#FF6827] z-10 transition-all"></div>
+        </div>
+
+        <form method="post" action="@Url.Action("CreateCategory", "CategoryManagement")" enctype="multipart/form-data">
+            <div class="modal-body py-4 px-6">
+                <div class="flex flex-col justify-center items-center">
+                    <div class="my-3">
+                        <label for="image-upload" class="bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-gray-400 placeholder:opacity-50 font-semibold hover:cursor-pointer">
+                            Chọn hình ảnh
+                        </label>
+                        <input id="image-upload" name="image" type="file" class="hidden" onchange="previewImage(event)">
+                    </div>
+                    <div class="mt-3 w-full">
+                        <input type="text" placeholder="Tên loại sản phẩm" asp-for="name"
+                               class=" bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-full">
+                    </div>
+                    <div class="mt-3 w-full">
+                        <textarea type="text" cols="0" rows="4" placeholder="Mô tả" asp-for="description"
+                               class=" bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-full h-48"></textarea>
+                    </div>
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <p class="mt-4 text-[#FF0000]">@ViewBag.ErrorMessage</p>
+                    }
+                </div>
+                <div class="text-center mt-7">
+                    <button type="submit" class="uppercase px-24 md:px-[118px] lg:px-[140px] py-2 rounded-md text-white bg-[#FF6827] hover:bg-[#FF6827]/[.9] font-medium">
+                        Tạo
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    function previewImage(event) {
+        var input = event.target;
+        var preview = document.getElementById('image-preview');
+        var previewContainer = document.getElementById('image-preview-container');
+        var defaultContainer = document.getElementById('image-default-container');
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                previewContainer.classList.remove('hidden');
+                defaultContainer.classList.add('hidden');
+
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            previewContainer.classList.remove('hidden');
+            defaultContainer.classList.add('hidden');
+        }
+    }
+</script>

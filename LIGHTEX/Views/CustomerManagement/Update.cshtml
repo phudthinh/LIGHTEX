@@ -1,0 +1,111 @@
+﻿@using Microsoft.AspNetCore.Authentication.Cookies
+@using System.Security.Claims
+@using LIGHTEX.Data
+@using Microsoft.AspNetCore.Http
+@using System.Diagnostics;
+@using System.Linq;
+@using Microsoft.EntityFrameworkCore;
+@inject IHttpContextAccessor HttpContextAccessor
+@model LIGHTEX.Models.CustomerViewModel;
+@{
+    ViewBag.Title = "Chỉnh sửa tài khoản người dùng";
+    Layout = "_LayoutAdmin";
+    var context = HttpContextAccessor?.HttpContext?.RequestServices.GetService(typeof(LIGHTEXContext)) as LIGHTEXContext;
+    var customer = await context.Customer.FirstOrDefaultAsync(c => c.username == @Model.username);
+}
+<body>
+    <div class="text-xl flex flex-col justify-center items-center mt-5 md:mt-0 relative">
+        <a class="w-12 h-12 p-3 md:hover:-translate-x-4 hover:cursor-pointer transition-all absolute top-0 left-0" asp-area="" asp-controller="CustomerManagement" asp-action="Index">
+            <svg class="fill-[#333333] w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58.08 35.27">
+                <path d="M275.89,418.65h48.44a2.16,2.16,0,1,1,0,4.31H275.38l12.5,11.76a2.13,2.13,0,0,1,.09,3,2.16,2.16,0,0,1-3,.11L269.09,423a2.2,2.2,0,0,1-.68-1.7,2.15,2.15,0,0,1,.59-1.59l14.88-15.85A2.15,2.15,0,0,1,287,406.8Z" transform="translate(-268.4 -403.17)" />
+            </svg>
+        </a>
+
+        <div class="flex justify-center items-center mx-2 w-auto h-20 md:hover:scale-125 transition-all hidden" id="image-preview-container">
+            <img class="w-full h-full rounded-full border-4 border-[#333333] object-cover" id="image-preview" alt="Avatar" />
+        </div>
+        <div class="mx-2 w-20 h-20 md:hover:scale-125 transition-all block" id="image-default-container">
+            @if (customer.avatar.SequenceEqual(new byte[0]))
+            {
+                <svg class="fill-[#333333] w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 98.39 98.16">
+                    <path d="M488.83,134.58a2.14,2.14,0,1,1-3.46-2.53,42.52,42.52,0,0,0,8.22-25.14,44.55,44.55,0,0,0-18.11-35.72,46.78,46.78,0,0,0-53.55,0,44.41,44.41,0,0,0-18.08,35.72,42.24,42.24,0,0,0,8.22,25.14,2.17,2.17,0,0,1-.49,3,2.14,2.14,0,0,1-3-.48,46.65,46.65,0,0,1-9.07-27.67,48.82,48.82,0,0,1,5.24-21.86,48,48,0,0,1,14.66-17.32,49,49,0,0,1,29.28-9.29h0A49,49,0,0,1,478,67.73a48.3,48.3,0,0,1,14.68,17.32,48.8,48.8,0,0,1,5.22,21.86,46.65,46.65,0,0,1-9.07,27.67Zm-36.31-7.49a4.58,4.58,0,0,1,.56.14c7.52.77,19.25,3.66,28.46,13.75a2.17,2.17,0,0,1,.14,2.72c-.76,1.16-8.27,11.62-29.9,12.79a2.76,2.76,0,0,1-.65.11c-.68,0-1.36,0-2,0s-1.36,0-2,0a2.76,2.76,0,0,1-.66-.11c-21.62-1.17-29.14-11.63-29.9-12.79a2.17,2.17,0,0,1,.14-2.72c9.21-10.09,20.95-13,28.43-13.75.2,0,.4-.11.6-.14a73.57,73.57,0,0,1,6.86,0Zm-3.43,4.2c-5.67.08-18.17,1.47-28,11.31,2.55,2.83,10.32,9.38,28,9.69,17.68-.31,25.45-6.86,28-9.69-9.83-9.84-22.33-11.23-28-11.31Zm-.37-48a17.92,17.92,0,1,1-12.64,5.25,17.91,17.91,0,0,1,12.64-5.25Zm9.58,8.31a13.54,13.54,0,1,0,4,9.58,13.49,13.49,0,0,0-4-9.58Z" transform="translate(-399.51 -58.44)" />
+                </svg>
+            }
+            else
+            {
+                <img class="w-full h-full rounded-full border-3 border-[#333333] object-cover" src="data:image/png;base64,@(Convert.ToBase64String(customer.avatar))" alt="Avatar" />
+            }
+        </div>
+        <form method="post" action="@Url.Action("UpdateCustomer", "CustomerManagement")" enctype="multipart/form-data">
+            <div class="modal-body py-4 px-6">
+                <div class="flex flex-col justify-center items-center">
+                    <div class="my-3">
+                        <label for="image-upload" class="bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-gray-400 placeholder:opacity-50 font-semibold hover:cursor-pointer">
+                            Chọn hình ảnh
+                        </label>
+                        <input id="image-upload" name="image" type="file" class="hidden" onchange="previewImage(event)">
+                    </div>
+                    <div class="mt-3 w-full">
+                        <input type="text" placeholder="Tài khoản" asp-for="username" value="@Model.username" readonly
+                               class=" bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-full">
+                    </div>
+                    <div class="mt-3 w-full">
+                        <input type="password" placeholder="Mật khẩu" asp-for="password" value="@Model.password"
+                               class=" bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-full">
+                    </div>
+                    <div class="mt-3 w-full">
+                        <input type="text" placeholder="Tên người dùng" asp-for="full_name" value="@Model.full_name"
+                               class=" bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-full">
+                    </div>
+                    <div class="mt-3 w-full">
+                        <input type="text" placeholder="Email" asp-for="email" value="@Model.email"
+                               class=" bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-full">
+                    </div>
+                    <div class="mt-3 w-full">
+                        <input type="text" placeholder="Số điện thoại" asp-for="phone" value="@Model.phone"
+                               class=" bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-full">
+                    </div>
+                    <div class="mt-3 w-full flex justify-between items-center">
+                        <input type="text" placeholder="Địa chỉ" asp-for="address" value="@Model.address"
+                               class="bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-[30%]">
+                        <input type="text" placeholder="Phường" asp-for="ward" value="@Model.ward"
+                               class="bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-[30%]">
+                        <input type="text" placeholder="Thành phố" asp-for="city" value="@Model.city"
+                               class="bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-[30%]">
+                    </div>
+
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <p class="mt-4 text-[#FF0000]">@ViewBag.ErrorMessage</p>
+                    }
+                </div>
+                <div class="text-center mt-7">
+                    <button type="submit" class="uppercase px-24 md:px-[118px] lg:px-[140px] py-2 rounded-md text-white bg-[#FF6827] hover:bg-[#FF6827]/[.9] font-medium">
+                        Chỉnh sửa
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    function previewImage(event) {
+        var input = event.target;
+        var preview = document.getElementById('image-preview');
+        var previewContainer = document.getElementById('image-preview-container');
+        var defaultContainer = document.getElementById('image-default-container');
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                previewContainer.classList.remove('hidden');
+                defaultContainer.classList.add('hidden');
+
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            previewContainer.classList.remove('hidden');
+            defaultContainer.classList.add('hidden');
+        }
+    }
+</script>

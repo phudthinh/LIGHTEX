@@ -45,6 +45,16 @@ namespace LIGHTEX.Controllers
                     ViewBag.ErrorMessage = "Tài khoản không tồn tại.";
                     return View("Index");
                 }
+                else if (account.password == "Account Google")
+                {
+                    ViewBag.ErrorMessage = "Tài khoản này được liên kết với Google. Vui lòng đổi mật khẩu bằng Google";
+                    return View("Index");
+                }
+                else if (account.password == "Account Facebook")
+                {
+                    ViewBag.ErrorMessage = "Tài khoản này được liên kết với Facebook. Vui lòng đổi mật khẩu bằng Facebook";
+                    return View("Index");
+                }
                 else if (string.IsNullOrWhiteSpace(customer.email))
                 {
                     ViewBag.ErrorMessage = "Tài khoản không có địa chỉ email để khôi phục. Vui lòng liên hệ nhà phát triển";
