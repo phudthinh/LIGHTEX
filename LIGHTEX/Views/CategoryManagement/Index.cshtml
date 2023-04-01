@@ -93,7 +93,7 @@
                 <div class="bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg overflow-y-auto">
                     <!-- modal header -->
                     <div class="modal-header flex justify-between items-center py-4 px-6">
-                        <h3 class="text-lg font-semibold">Xác nhận xóa tài khoản</h3>
+                        <h3 class="text-lg font-semibold">Xác nhận xóa loại sản phẩm</h3>
                         <button id="modal-delete-close" class="group w-auto h-4 md:hover:scale-125 hover:cursor-pointer md:hover:rotate-90 transition-all block">
                             <svg class="fill-[#333333] w-full h-full group-hover:fill-[#FF0000]" xmlns="http:www.w3.org/2000/svg" viewBox="0 0 63.71 63.71">
                                 <path d="M266.2,392.63a2.16,2.16,0,0,1,3.06-3.06l28.17,28.17,28.18-28.17a2.16,2.16,0,0,1,3.06,3.06L300.5,420.81,328.67,449a2.16,2.16,0,0,1-3.06,3.06l-28.18-28.17L269.26,452A2.16,2.16,0,0,1,266.2,449l28.17-28.17Z" transform="translate(-265.58 -388.95)" />
@@ -132,6 +132,12 @@
         deleteForm.action = `/CategoryManagement/DeleteCategory/${deleteFormId}`;
         deleteForm.submit();
     });
+    cancelDeleteBtn.addEventListener('click', () => {
+        modalDelete.style.display = 'none';
+    })
+    modalDeleteCloseBtn.addEventListener('click', () => {
+        modalDelete.style.display = 'none';
+    })
     function enableSubmit() {
         document.getElementById("submitBtn").removeAttribute("disabled");
     }
