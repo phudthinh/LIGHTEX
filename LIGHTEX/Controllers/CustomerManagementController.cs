@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
+using System;
 using System.IO;
 
 namespace LIGHTEX.Controllers
@@ -42,6 +43,7 @@ namespace LIGHTEX.Controllers
                 username = existingAccount.username,
                 password = existingAccount.password,
                 full_name = existingAccount.full_name,
+                active = existingAccount.active,
                 email = existingCustomer.email,
                 phone = existingCustomer.phone,
                 address = existingCustomer.address,
@@ -143,7 +145,7 @@ namespace LIGHTEX.Controllers
             {
                 existingAccount.password = update.password;
                 existingAccount.full_name = update.full_name;
-
+                existingAccount.active = update.active;
                 existingCustomer.email = string.IsNullOrWhiteSpace(update.email) ? "" : update.email;
                 existingCustomer.phone = string.IsNullOrWhiteSpace(update.phone) ? "" : update.phone;
                 existingCustomer.address = string.IsNullOrWhiteSpace(update.address) ? "" : update.address;

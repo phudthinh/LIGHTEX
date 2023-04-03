@@ -50,7 +50,7 @@ namespace LIGHTEX.Controllers
         {
             if (string.IsNullOrWhiteSpace(create.name))
             {
-                ViewBag.ErrorMessage = "Tên sản phẩm không được để trống.";
+                ViewBag.ErrorMessage = "Tên loại sản phẩm không được để trống.";
                 return View("Create");
             }
             else
@@ -87,7 +87,7 @@ namespace LIGHTEX.Controllers
 
             if (string.IsNullOrWhiteSpace(update.name))
             {
-                ViewBag.ErrorMessage = "Tên sản phẩm không được để trống.";
+                ViewBag.ErrorMessage = "Tên loại sản phẩm không được để trống.";
                 return View("Update", update);
             }
             else
