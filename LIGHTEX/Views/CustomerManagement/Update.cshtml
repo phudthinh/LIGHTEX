@@ -15,13 +15,14 @@
 }
 <body>
     <div class="text-xl flex flex-col justify-center items-center mt-5 md:mt-0 relative">
+        <h1 class="text-4xl text-black font-bold mb-4 text-center">Chỉnh sửa tài khoản người dùng</h1>
         <a class="w-12 h-12 p-3 md:hover:-translate-x-3 hover:cursor-pointer transition-all absolute top-0 left-0" asp-area="" asp-controller="CustomerManagement" asp-action="Index">
             <svg class="fill-[#333333] w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58.08 35.27">
                 <path d="M275.89,418.65h48.44a2.16,2.16,0,1,1,0,4.31H275.38l12.5,11.76a2.13,2.13,0,0,1,.09,3,2.16,2.16,0,0,1-3,.11L269.09,423a2.2,2.2,0,0,1-.68-1.7,2.15,2.15,0,0,1,.59-1.59l14.88-15.85A2.15,2.15,0,0,1,287,406.8Z" transform="translate(-268.4 -403.17)" />
             </svg>
         </a>
 
-        <div class="flex justify-center items-center mx-2 w-auto h-20 md:hover:scale-125 transition-all hidden" id="image-preview-container">
+        <div class="flex justify-center items-center mx-2 w-20 h-20 md:hover:scale-125 transition-all hidden" id="image-preview-container">
             <img class="w-full h-full rounded-full border-4 border-[#333333] object-cover" id="image-preview" alt="Avatar" />
         </div>
         <div class="mx-2 w-20 h-20 md:hover:scale-125 transition-all block" id="image-default-container">

@@ -40,11 +40,12 @@ namespace LIGHTEX.Controllers
             var Product = new Product()
             {
                 id_product = existingProduct.id_product,
-                id_category = 1,
-                id_brand = 1,
+                id_category = existingProduct.id_category,
+                id_brand = existingProduct.id_brand,
                 name = existingProduct.name,
                 information= existingProduct.information,
                 price= existingProduct.price,
+                status = existingProduct.status,
                 modified_date = DateTime.Now,
             };
 
@@ -118,17 +119,36 @@ namespace LIGHTEX.Controllers
             if (string.IsNullOrWhiteSpace(update.name))
             {
                 ViewBag.ErrorMessage = "Tên sản phẩm không được để trống.";
-                return View("Update", update);
+                return View("Update");
+            }
+            else if (update.price == 0)
+            {
+                ViewBag.ErrorMessage = "Giá tiền không được để trống.";
+                return View("Update");
+            }
+            else if (update.price < 0)
+            {
+                ViewBag.ErrorMessage = "Giá tiền không âm.";
+                return View("Update");
+            }
+            else if (update.id_category == 0)
+            {
+                ViewBag.ErrorMessage = "Bạn phải chọn một loại sản phẩm.";
+                return View("Update");
+            }
+            else if (update.id_brand == 0)
+            {
+                ViewBag.ErrorMessage = "Bạn phải chọn một nhãn hàng.";
+                return View("Update");
             }
             else
             {
                 existingProduct.name = update.name;
                 existingProduct.information = string.IsNullOrWhiteSpace(update.information) ? "" : update.information;
-                existingProduct.id_category = 1;
-                existingProduct.id_brand = 1;
-                existingProduct.information = string.IsNullOrWhiteSpace(update.information) ? "" : update.information;
-                existingProduct.price = string.IsNullOrWhiteSpace(update.price.ToString()) ? 0 : double.Parse(update.price.ToString());
-                existingProduct.status = true;
+                existingProduct.id_category = update.id_category;
+                existingProduct.id_brand = update.id_brand;
+                existingProduct.price = update.price;
+                existingProduct.status = update.status;
                 existingProduct.modified_date = DateTime.Now;
 
                 if (image != null)
