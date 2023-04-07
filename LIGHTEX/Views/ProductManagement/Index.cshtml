@@ -20,7 +20,7 @@
 }
 <body>
     <div class="flex flex-col gap-5">
-        <h1 class="text-4xl text-black font-bold mb-4 text-center">Quản lý sản phẩm</h1>
+        <h1 class="text-2xl lg:text-4xl text-black font-bold mb-4 text-center">Quản lý sản phẩm</h1>
         <div class="flex justify-between items-center">
                 <a asp-area="" asp-controller="ProductManagement" asp-action="Create" class="group px-4 py-2 transition-all bg-[#FF6827] hover:bg-[#FF6827]/[.9] flex gap-3 items-center rounded-lg hover:cursor-pointer">
                     <svg class="fill-[#FFFFFF] md:group-hover:scale-125 md:group-hover:cursor-pointer md:group-hover:rotate-90 w-atuo h-5 transition-all" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88.33 88.33">
@@ -57,7 +57,7 @@
                         <tr class="h-14 w-full last:rounded-b-lg @(count++ % 2 == 0 ? "bg-[#ececec]" : "bg-[#FFFFFF] border-y border-[#cccccc]")">
                             <td class="w-0 md:w-[10%] lg:w-[5%] hidden md:table-cell px-3 py-1"><p class="overflow-hidden overflow-ellipsis text-center">@product.id_product</p></td>
                             <td class="w-[60%] md:w-[50%] lg:w-[30%] px-3 py-1"><p class="overflow-hidden overflow-ellipsis">@product.name</p></td>
-                            <td class="w-0 md:w-[20%] lg:w-[35%] hidden lg:table-cell px-3 py-1"><p class="overflow-hidden overflow-ellipsis">@product.price.ToString("N0") VNĐ</p></td>
+                            <td class="w-0 md:w-[20%] lg:w-[35%] hidden lg:table-cell px-3 py-1"><p class="overflow-hidden overflow-ellipsis">@product.price.ToString("N0")đ</p></td>
                             <td class="w-[20%] md:w-0 lg:w-[15%] px-3 py-1 h-14">
                                 <div class="relative group flex justify-center items-center w-full h-full lg:hover:scale-125 transition-all">
                                     <img class="w-8 h-8 transition-all z-20 object-cover" src="data:image/png;base64,@(Convert.ToBase64String(product.image))" alt="image" />

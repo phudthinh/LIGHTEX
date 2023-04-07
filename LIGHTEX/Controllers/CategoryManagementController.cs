@@ -120,9 +120,19 @@ namespace LIGHTEX.Controllers
                     var category = await _context.Category.FirstOrDefaultAsync(c => c.id_category == id_category);
                     if (category != null)
                     {
-                        _context.Category.Remove(category);
-                        await _context.SaveChangesAsync();
-                        transaction.Commit();
+                        // Kiểm tra xem danh mục này có liên kết với bất kỳ sản phẩm nào không
+                        if (!_context.Product.Any(p => p.id_category == id_category))
+                        {
+                            // Nếu không có sản phẩm nào liên kết với danh mục này thì xóa danh mục
+                            _context.Category.Remove(category);
+                            await _context.SaveChangesAsync();
+                            transaction.Commit();
+                        }
+                        else
+                        {
+                            // Nếu có sản phẩm liên kết với danh mục này, trả về một thông báo lỗi
+                            return BadRequest("Không thể xóa danh mục vì vẫn còn sản phẩm liên kết.");
+                        }
                     }
                     return RedirectToAction("Index", "CategoryManagement");
                 }
@@ -133,5 +143,6 @@ namespace LIGHTEX.Controllers
                 }
             }
         }
+
     }
 }

@@ -40,7 +40,7 @@ namespace LIGHTEX.Controllers
             {
                 id_brand = existingBrand.id_brand,
                 name = existingBrand.name,
-                description= existingBrand.description,
+                description = existingBrand.description,
             };
 
             return View(brand);
@@ -97,9 +97,18 @@ namespace LIGHTEX.Controllers
                     var brand = await _context.Brand.FirstOrDefaultAsync(c => c.id_brand == id_brand);
                     if (brand != null)
                     {
-                        _context.Brand.Remove(brand);
-                        await _context.SaveChangesAsync();
-                        transaction.Commit();
+                        // Kiểm tra xem nhãn hàng này có liên kết với bất kỳ sản phẩm nào không
+                        if (!_context.Product.Any(p => p.id_brand == id_brand))
+                        {
+                            _context.Brand.Remove(brand);
+                            await _context.SaveChangesAsync();
+                            transaction.Commit();
+                        }
+                        else
+                        {
+                            // Nếu có sản phẩm liên kết với nhãn hàng này, trả về một thông báo lỗi
+                            return BadRequest("Không thể xóa nhãn hàng vì vẫn còn sản phẩm liên kết.");
+                        }
                     }
                     return RedirectToAction("Index", "BrandManagement");
                 }

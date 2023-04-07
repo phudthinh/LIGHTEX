@@ -1,8 +1,89 @@
-﻿@{
+﻿@model LIGHTEX.Models.Category;
+@{
     ViewData["Title"] = "Trang chủ";
     Layout = "_Layout";
 }
+@using Microsoft.AspNetCore.Http;
+@using System.Diagnostics;
+@using System.Linq;
+@using LIGHTEX.Data
+@using Microsoft.EntityFrameworkCore;
 
-<div>
-    <h1>This is Homepage</h1>
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    int count = 0;
+    string searchText = HttpContextAccessor.HttpContext.Request.Query["searchText"];
+
+    var context = HttpContextAccessor?.HttpContext?.RequestServices.GetService(typeof(LIGHTEXContext)) as LIGHTEXContext;
+    var categories = context.Category.Where(c => searchText == null || c.name.Contains(searchText)).ToList();
+}
+<div class="container mx-auto flex justify-between h-[80vh] mt-10">
+    <nav class="flex h-full w-12 md:w-[10%] items-center">
+        <div class="flex flex-col justify-center items-start gap-5">
+        @foreach (var category in categories)
+        {
+            <div class="relative group flex justify-center items-center w-12 h-12 lg:w-14 lg:h-14 lg:hover:scale-125 transition-all hover:cursor-pointer">
+                    <img class="lg:group-hover:invert w-8 h-8 lg:w-10 lg:h-10 transition-all z-20 object-cover" src="data:image/png;base64,@(Convert.ToBase64String(category.icon))" alt="image" />
+                    <div class="absolute bg-transparent w-12 h-12 lg:w-14 lg:h-14 rounded-lg lg:group-hover:bg-[#FF6827] z-10 transition-all"></div>
+                <div class="absolute flex left-0 justify-center items-center w-max h-14 lg:group-hover:translate-x-16 transition-all z-0">
+                <p class="text-[0px] lg:group-hover:text-base pt-1 text-start w-24">@category.name</p>
+                </div>
+            </div>
+        }
+        </div>
+    </nav>
+    <div class="w-[85%] h-full flex flex-col justify-between">
+        <div class="w-full h-[70%] bg-gradient-to-br from-[#6D7CD3] to-[#4153AD] rounded-t-[3rem] rounded-b-[1rem]">
+            <div class="px-20 py-12 h-full flex relative">
+                <div class="w-[50%]">
+                    <h1 class="text-6xl font-bold text-start text-[#FFFFFF]">Tên sản phẩm</h1>
+                    <h3 class="text-5xl font-normal text-start text-[#FFFFFF] mt-4">128.000đ</h3>
+                    <div class="mt-16 flex flex-col gap-4">
+                        <div class="group flex justify-between items-center w-[70%] lg:hover:cursor-pointer py-2 border-b-[1px] border-[#FFFFFF]">
+                            <p class="text-2xl font-normal text-start text-[#FFFFFF]">Thông tin sản phẩm</p>
+                            <svg class="mx-4 fill-[#FFFFFF] lg:group-hover:scale-125 w-5 h-auto transition-all z-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58.63 31.47">
+                                <path d="M268.73,408.74a2.16,2.16,0,0,1,3.06-3.06l25.66,25.66,25.62-25.66a2.16,2.16,0,0,1,3.06,3.06L299,435.9a2.12,2.12,0,0,1-3,0Z" transform="translate(-268.12 -405.07)" />
+                            </svg>
+                        </div>
+
+                        <div class="group flex justify-between items-center w-[70%] lg:hover:cursor-pointer py-2 border-b-[1px] border-[#FFFFFF]">
+                            <p class="text-2xl font-normal text-start text-[#FFFFFF]">Về nhãn hàng</p>
+                            <svg class="mx-4 fill-[#FFFFFF] lg:group-hover:scale-125 w-5 h-auto transition-all z-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58.63 31.47">
+                                <path d="M268.73,408.74a2.16,2.16,0,0,1,3.06-3.06l25.66,25.66,25.62-25.66a2.16,2.16,0,0,1,3.06,3.06L299,435.9a2.12,2.12,0,0,1-3,0Z" transform="translate(-268.12 -405.07)" />
+                            </svg>
+                        </div>
+
+                        <div class="group flex justify-between items-center w-[70%] lg:hover:cursor-pointer py-2 border-b-[1px] border-[#FFFFFF]">
+                            <p class="text-2xl font-normal text-start text-[#FFFFFF]">Đánh giá</p>
+                            <svg class="mx-4 fill-[#FFFFFF] lg:group-hover:scale-125 w-5 h-auto transition-all z-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58.63 31.47">
+                                <path d="M268.73,408.74a2.16,2.16,0,0,1,3.06-3.06l25.66,25.66,25.62-25.66a2.16,2.16,0,0,1,3.06,3.06L299,435.9a2.12,2.12,0,0,1-3,0Z" transform="translate(-268.12 -405.07)" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-[50%] h-full flex items-center justify-center">
+                    <div class="mt-[80%] flex items-center justify-center gap-10">
+                        <div class="flex items-center justify-center gap-3">
+                            <button type="submit" class="px-3 py-2 rounded-md text-center text-white bg-[#FFFFFF]/[.5] hover:bg-[#FFFFFF]/[.8] font-medium">
+                                -
+                            </button>
+                            <p class="text-2xl font-normal text-start text-[#FFFFFF]">1</p>
+                            <button type="submit" class="px-3 py-2 rounded-md text-center text-white bg-[#FFFFFF]/[.5] hover:bg-[#FFFFFF]/[.8] font-medium">
+                                +
+                            </button>
+                        </div>
+                        <button type="submit" class="px-4 py-2 rounded-md text-center text-white bg-[#FF6827] hover:bg-[#FF6827]/[.9] font-medium">
+                            Thêm vào giỏ hàng
+                        </button>
+                    </div>
+                </div>
+                <span class="absolute hover:scale-125 hover:cursor-pointer top-12 right-20 transition-all z-20">
+                    <svg class="fill-[#FFFFFF] w-10 h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 81.72 67.92">
+                        <path d="M293.88,395a2.15,2.15,0,1,1-3.63,2.32,15,15,0,0,0-12.42-6.18c-8.81,0-13.75,3.38-15.76,8.48a21.36,21.36,0,0,0-.93,10.46,43.6,43.6,0,0,0,3.71,12.56c6.41,14.23,19.56,27.72,32.57,27.78s26.19-13.55,32.6-27.78a44.56,44.56,0,0,0,3.71-12.56,21.72,21.72,0,0,0-.93-10.46c-2.05-5.1-6.95-8.48-15.76-8.48-18.23,0-18,18.17-18,18.23a2.16,2.16,0,0,1-4.31,0c0-.06-.29-22.56,22.31-22.56,10.88,0,17.09,4.47,19.75,11.22A25,25,0,0,1,338,410.63a47.81,47.81,0,0,1-4.05,13.8c-7,15.51-21.57,30.14-36.31,30.33h-.43c-14.74-.19-29.34-14.82-36.31-30.33a48.54,48.54,0,0,1-4.08-13.8,25.46,25.46,0,0,1,1.24-12.56c2.67-6.75,8.85-11.22,19.76-11.22A19.42,19.42,0,0,1,293.88,395Z" transform="translate(-256.57 -386.85)" />
+                    </svg>
+                </span>
+            </div>
+        </div>
+        <div class="w-full h-[28%] bg-[#4153AD] rounded-t-[1rem] rounded-b-[3rem]"></div>
+    </div>
 </div>
