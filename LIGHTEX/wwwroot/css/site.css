@@ -1,4 +1,4 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 /*==================== GOOGLE FONTS ====================*/
@@ -110,6 +110,24 @@ select {
     appearance: none;
 }
 
+::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+}
+
+::-webkit-scrollbar-track {
+    background: #eaf1fd;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4153AD;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6D7CD3;
+}
+
 input[type="number"] {
     -webkit-appearance: textfield;
     -moz-appearance: textfield;
@@ -169,6 +187,65 @@ input:-webkit-autofill:focus {
 .account:hover .show__account {
     display: block;
 }
+
+.swiper-nav .swiper-container {
+    overflow: hidden;
+    height: 40vh;
+    width: 100%;
+}
+
+.swiper-nav .swiper-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.swiper-nav .swiper-button-prev {
+    top: 20% !important;
+    left: 10px !important;
+    transform: rotate(90deg) !important;
+    color: #333333 !important;
+}
+
+.swiper-nav .swiper-button-next {
+    top: auto !important;
+    bottom: 18% !important;
+    left: 10px !important;
+    transform: rotate(90deg) !important;
+    color: #333333 !important;
+}
+
+.swiper-nav .swiper-button-prev::after,
+.swiper-nav .swiper-button-next::after {
+    font-size: 24px !important;
+}
+
+.swiper-bot .swiper-container {
+    overflow: hidden;
+    width: 100%;
+}
+
+.swiper-bot .swiper-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.swiper-bot .swiper-slide {
+    display: flex;
+    align-items: center;
+}
+
+.swiper-bot .swiper-button-prev {
+    color: #FFFFFF !important;
+}
+
+.swiper-bot .swiper-button-next {
+    color: #FFFFFF !important;
+}
+
+.swiper-bot .swiper-button-prev::after,
+.swiper-bot .swiper-button-next::after {
+    font-size: 12px !important;
+}
 /*==================== MEDIA QUERIES ====================*/
 /* For small devices */
 @media screen and (max-width : 350px ) {
@@ -197,5 +274,9 @@ input:-webkit-autofill:focus {
         border-radius: 50px;
         box-shadow: 0px 0px 3px;
         transition: all 500ms cubic-bezier(0, 0.110, 0.35, 2);
+    }
+    .swiper-nav .swiper-button-prev,
+    .swiper-nav .swiper-button-next {
+        left: 30px !important;
     }
 }

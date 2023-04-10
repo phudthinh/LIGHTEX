@@ -9,6 +9,8 @@
 @using System.Linq;
 @using LIGHTEX.Data
 @using Microsoft.EntityFrameworkCore;
+@using System.Globalization;
+
 
 @inject IHttpContextAccessor HttpContextAccessor
 @{
@@ -16,7 +18,7 @@
     string searchText = HttpContextAccessor.HttpContext.Request.Query["searchText"];
 
     var context = HttpContextAccessor?.HttpContext?.RequestServices.GetService(typeof(LIGHTEXContext)) as LIGHTEXContext;
-    var products = context.Product.Where(p => searchText == null || p.name.Contains(searchText)).ToList();
+    var products = await context.Product.Where(p => searchText == null || p.name.Contains(searchText)).ToListAsync();
 }
 <body>
     <div class="flex flex-col gap-5">
@@ -57,7 +59,7 @@
                         <tr class="h-14 w-full last:rounded-b-lg @(count++ % 2 == 0 ? "bg-[#ececec]" : "bg-[#FFFFFF] border-y border-[#cccccc]")">
                             <td class="w-0 md:w-[10%] lg:w-[5%] hidden md:table-cell px-3 py-1"><p class="overflow-hidden overflow-ellipsis text-center">@product.id_product</p></td>
                             <td class="w-[60%] md:w-[50%] lg:w-[30%] px-3 py-1"><p class="overflow-hidden overflow-ellipsis">@product.name</p></td>
-                            <td class="w-0 md:w-[20%] lg:w-[35%] hidden lg:table-cell px-3 py-1"><p class="overflow-hidden overflow-ellipsis">@product.price.ToString("N0")đ</p></td>
+                            <td class="w-0 md:w-[20%] lg:w-[35%] hidden lg:table-cell px-3 py-1"><p class="overflow-hidden overflow-ellipsis">@product.price.ToString("N0", CultureInfo.CreateSpecificCulture("de-DE")).Replace(",", ".")đ</p></td>
                             <td class="w-[20%] md:w-0 lg:w-[15%] px-3 py-1 h-14">
                                 <div class="relative group flex justify-center items-center w-full h-full lg:hover:scale-125 transition-all">
                                     <img class="w-8 h-8 transition-all z-20 object-cover" src="data:image/png;base64,@(Convert.ToBase64String(product.image))" alt="image" />
@@ -85,9 +87,9 @@
                 </tbody>
             </table>
         </div>
-        <div id="deleteModal" class="modal fixed w-full h-full top-0 left-0 flex items-center justify-center z-30" style="display:none;">
-            <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50 z-40"></div>
-            <div class="modal-container fixed top-10 left-0 right-0 flex items-center justify-center z-50">
+        <div id="deleteModal" class="modal fixed w-full h-full top-0 left-0 flex items-center justify-center z-[60]" style="display:none;">
+            <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50 z-[70]"></div>
+            <div class="modal-container fixed top-10 left-0 right-0 flex items-center justify-center z-[80]">
                 <div class="bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg overflow-y-auto">
                     <!-- modal header -->
                     <div class="modal-header flex justify-between items-center py-4 px-6">

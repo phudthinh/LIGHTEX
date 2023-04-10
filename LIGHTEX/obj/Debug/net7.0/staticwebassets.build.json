@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "+sYLEeYVYajybZfrRfm7q03gLQxfP5+HMxOqxQ+Q77w=",
+  "Hash": "uIi4in5FXr8hL0S/vjQ7omksadqdzQt6yfv4DHZb994=",
   "Source": "LIGHTEX",
   "BasePath": "_content/LIGHTEX",
   "Mode": "Default",
@@ -51,6 +51,23 @@
       "OriginalItemSpec": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\LIGHTEX.bundle.scp.css"
     },
     {
+      "Identity": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\wwwroot\\assets\\bg-chooseLight.png",
+      "SourceId": "LIGHTEX",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\wwwroot\\",
+      "BasePath": "_content/LIGHTEX",
+      "RelativePath": "assets/bg-chooseLight.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\assets\\bg-chooseLight.png"
+    },
+    {
       "Identity": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\wwwroot\\assets\\iconDefault.png",
       "SourceId": "LIGHTEX",
       "SourceType": "Discovered",
@@ -66,6 +83,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\assets\\iconDefault.png"
+    },
+    {
+      "Identity": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\wwwroot\\assets\\light.png",
+      "SourceId": "LIGHTEX",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\wwwroot\\",
+      "BasePath": "_content/LIGHTEX",
+      "RelativePath": "assets/light.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\assets\\light.png"
     },
     {
       "Identity": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\wwwroot\\assets\\logo.png",

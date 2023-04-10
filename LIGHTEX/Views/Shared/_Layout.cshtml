@@ -23,7 +23,7 @@
     <link rel="icon" href="~/assets/logo.png">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
 </head>
 <body>
     <header class="drop-shadow w-full h-16 bg-white sticky top-0 z-50">
@@ -271,7 +271,6 @@
             <p>© @year PhuThinh. All rights reserved.</p>
         </div>
     </footer>
-
     <script>
         if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
             location.reload(true);
@@ -289,7 +288,6 @@
                 });
         }
     </script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
