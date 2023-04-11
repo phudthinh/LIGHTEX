@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "UYQE6QfhtV6gtltyQ3gtU6xyu6MvIQosabDhL2ETewqr43fzVVv7uoNbVap8cV7Qvqnxe0PAa2RsD3TtaVVSSQ==",
+  "dgSpecHash": "KLmSzX39tkgNdxaoaMqV98jmEGLwFwRYONvZZdpYFSXV1SFp6ZX4XVcODoOhTDQun9KAZZfcCr/jgCYKEyMZXQ==",
   "success": true,
   "projectFilePath": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\LIGHTEX.csproj",
   "expectedPackageFiles": [
@@ -70,6 +70,7 @@
     "C:\\Users\\NC\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
     "C:\\Users\\NC\\.nuget\\packages\\mimekit\\3.6.0\\mimekit.3.6.0.nupkg.sha512",
     "C:\\Users\\NC\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
+    "C:\\Users\\NC\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\NC\\.nuget\\packages\\portable.bouncycastle\\1.9.0\\portable.bouncycastle.1.9.0.nupkg.sha512",
     "C:\\Users\\NC\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
     "C:\\Users\\NC\\.nuget\\packages\\system.codedom\\4.4.0\\system.codedom.4.4.0.nupkg.sha512",

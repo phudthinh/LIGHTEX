@@ -178,3 +178,4 @@ D:\ASP.Net\LIGHTEX\LIGHTEX\obj\Debug\net7.0\refint\LIGHTEX.dll
 D:\ASP.Net\LIGHTEX\LIGHTEX\obj\Debug\net7.0\LIGHTEX.pdb
 D:\ASP.Net\LIGHTEX\LIGHTEX\obj\Debug\net7.0\LIGHTEX.genruntimeconfig.cache
 D:\ASP.Net\LIGHTEX\LIGHTEX\obj\Debug\net7.0\ref\LIGHTEX.dll
+F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\bin\Debug\net7.0\Newtonsoft.Json.dll
