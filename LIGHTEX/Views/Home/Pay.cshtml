@@ -1,0 +1,52 @@
+﻿@model LIGHTEX.Models.CustomerViewModel;
+@{
+    ViewData["Title"] = "Nạp tiền";
+    Layout = "_Layout";
+}
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using System.Security.Claims
+@using LIGHTEX.Data
+@using Microsoft.AspNetCore.Http
+@using System.Diagnostics;
+@using System.Linq;
+@using Microsoft.EntityFrameworkCore;
+
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var context = HttpContextAccessor?.HttpContext?.RequestServices.GetService(typeof(LIGHTEXContext)) as LIGHTEXContext;
+    var username = HttpContextAccessor?.HttpContext?.User?.Identity?.Name;
+    var account = await context.Account.FirstOrDefaultAsync(c => c.username == username && c.permission == 0);
+    var customer = await context.Customer.FirstOrDefaultAsync(c => c.username == username);
+    if (account == null)
+    {
+        <script>
+            window.location.href = "/Login/Index";
+        </script>
+    }
+}
+<body>
+
+    <div class="container mx-auto px-4 flex flex-col justify-center w-full md:w-[80%] lg:w-[30%] h-full py-10">
+        <h1 class="text-2xl lg:text-4xl text-black font-bold mb-4 text-center">Nạp tiền</h1>
+        <form method="post" action="@Url.Action("Pay", "Home")" enctype="multipart/form-data">
+            <div class="mt-3 w-full hidden">
+                <input type="text" placeholder="Tài khoản" asp-for="username" value="@account?.username" readonly
+                        class=" bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-full">
+            </div>
+            <div class="mt-3 w-full">
+                <input type="number" placeholder="Số tiền nạp" asp-for="money"
+                        class=" bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-full">
+            </div>
+                            
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <p class="mt-4 text-center text-[#FF0000]">@ViewBag.ErrorMessage</p>
+            }
+            <div class="text-center mt-7">
+                <button type="submit" class="uppercase px-24 w-full py-2 rounded-md text-white bg-[#FF6827] hover:bg-[#FF6827]/[.9] font-medium">
+                    Nạp tiền
+                </button>
+            </div>
+        </form>
+    </div>
+</body>

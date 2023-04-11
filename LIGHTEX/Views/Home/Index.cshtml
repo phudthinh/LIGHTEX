@@ -1,4 +1,4 @@
-﻿@model LIGHTEX.Models.Category;
+﻿@model LIGHTEX.Models.Domain.Cart;
 @{
     ViewData["Title"] = "Trang chủ";
     Layout = "_Layout";
@@ -19,6 +19,8 @@
     var context = HttpContextAccessor?.HttpContext?.RequestServices.GetService(typeof(LIGHTEXContext)) as LIGHTEXContext;
     var categories = await context.Category.ToListAsync();
     var categoryFirst = await context.Category.FirstOrDefaultAsync();
+    var username = HttpContextAccessor?.HttpContext?.User?.Identity?.Name;
+    var customer = await context.Customer.FirstOrDefaultAsync(c => c.username == username);
     var products = await context.Product
                     .Join(context.Brand, p => p.id_brand, b => b.id_brand, (p, b) => new { Product = p, Brand = b })
                     .Where(pb => pb.Product.id_category == categoryFirst.id_category)
@@ -87,6 +89,7 @@
             <div class="w-full h-[70%] bg-gradient-to-br from-[#6D7CD3] to-[#4153AD] rounded-t-[3rem] rounded-b-[1rem]">
                 <div class="px-20 py-12 h-full flex relative">
                     <div class="w-[50%]">
+                        <p class="hidden" id="product-id">@products.FirstOrDefault().Product.id_product</p>
                         <h1 class="text-6xl font-bold text-start text-[#FFFFFF]" id="product-name">@products.FirstOrDefault().Product.name</h1>
                         <h3 class="text-5xl font-normal text-start text-[#FFFFFF] mt-4" id="product-price">@products.FirstOrDefault().Product.price.ToString("N0", CultureInfo.CreateSpecificCulture("de-DE")).Replace(",", ".")đ</h3>
                         <div class="mt-14 flex flex-col gap-4">
@@ -178,18 +181,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="w-[50%] h-full flex items-center justify-center">
+                    <form method="post" enctype="multipart/form-data" class="w-[50%] h-full flex items-center justify-center">
                         <div class="mt-[80%] flex items-center justify-center gap-10">
                             <div class="flex items-center justify-center gap-3">
-                                <button type="submit" class="px-3 py-2 rounded-md text-center text-white bg-[#FFFFFF]/[.5] hover:bg-[#FFFFFF]/[.8] font-medium" id="minusButton">-</button>
+                                <input type="hidden" id="product-idInput" asp-for="id_product" value="@products.FirstOrDefault().Product.id_product" readonly />
+                                <input type="hidden" id="product-customer" asp-for="id_customer" value="@customer.id_customer" readonly />
+                                <input type="hidden" id="numberItemInput" name="quantity" value=1 />
+                                <div class="px-3 py-2 rounded-md text-center text-white bg-[#FFFFFF]/[.5] hover:bg-[#FFFFFF]/[.8] font-medium" id="minusButton">-</div>
                                 <p class="text-2xl font-normal text-start text-[#FFFFFF]" id="numberItem">1</p>
-                                <button type="submit" class="px-3 py-2 rounded-md text-center text-white bg-[#FFFFFF]/[.5] hover:bg-[#FFFFFF]/[.8] font-medium" id="plusButton">+</button>
+                                <div class="px-3 py-2 rounded-md text-center text-white bg-[#FFFFFF]/[.5] hover:bg-[#FFFFFF]/[.8] font-medium" id="plusButton">+</div>
                             </div>
                             <button type="submit" class="px-4 py-2 rounded-md text-center text-white bg-[#FF6827] hover:bg-[#FF6827]/[.9] font-medium">
                                 Thêm vào giỏ hàng
                             </button>
                         </div>
-                    </div>
+                    </form>
                     <span class="absolute hover:scale-125 hover:cursor-pointer top-12 right-20 transition-all z-20">
                         <svg class="fill-[#FFFFFF] w-10 h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 81.72 67.92">
                             <path d="M293.88,395a2.15,2.15,0,1,1-3.63,2.32,15,15,0,0,0-12.42-6.18c-8.81,0-13.75,3.38-15.76,8.48a21.36,21.36,0,0,0-.93,10.46,43.6,43.6,0,0,0,3.71,12.56c6.41,14.23,19.56,27.72,32.57,27.78s26.19-13.55,32.6-27.78a44.56,44.56,0,0,0,3.71-12.56,21.72,21.72,0,0,0-.93-10.46c-2.05-5.1-6.95-8.48-15.76-8.48-18.23,0-18,18.17-18,18.23a2.16,2.16,0,0,1-4.31,0c0-.06-.29-22.56,22.31-22.56,10.88,0,17.09,4.47,19.75,11.22A25,25,0,0,1,338,410.63a47.81,47.81,0,0,1-4.05,13.8c-7,15.51-21.57,30.14-36.31,30.33h-.43c-14.74-.19-29.34-14.82-36.31-30.33a48.54,48.54,0,0,1-4.08-13.8,25.46,25.46,0,0,1,1.24-12.56c2.67-6.75,8.85-11.22,19.76-11.22A19.42,19.42,0,0,1,293.88,395Z" transform="translate(-256.57 -386.85)" />
@@ -206,6 +212,7 @@
                                 <img class="lg:group-hover:scale-125 w-32 h-32 transition-all object-cover z-10"
                                  alt="image"
                                  src="data:image/png;base64,@(Convert.ToBase64String(product.Product.image))" />
+                                <id class="hidden">@product.Product.id_product</id>
                                 <name class="text-[#FFFFFF] text-base text-center pt-4 lg:group-hover:pt-8 transition-all">@product.Product.name</name>
                                 <price class="hidden">@product.Product.price</price>
                                 <information class="hidden">@product.Product.information</information>
@@ -282,6 +289,7 @@
                     productHTML += '<div class="products group relative flex flex-col items-center w-36 hover:cursor-pointer">';
                     productHTML += '<img class="lg:group-hover:scale-125 w-32 h-32 transition-all object-cover z-10" alt="image" src="data:image/png;base64,' + product.product.image + '"/>';
                     productHTML += '<name class="text-[#FFFFFF] text-base text-center pt-4 lg:group-hover:pt-8 transition-all">' + product.product.name + '</name>';
+                    productHTML += '<id class="hidden">' + product.product.id_product + '</id>';
                     productHTML += '<price class="hidden">' + product.product.price + '</price>';
                     productHTML += '<information class="hidden">' + product.product.information + '</information>';
                     productHTML += '<about-brand class="hidden">' + product.brand.description + '</about-brand>';
@@ -342,13 +350,21 @@
             });
 
             $('#product-comment').html(commentHtml);
-            $('#product-name').text($(this).find('name').text());
+            var productId = parseInt($(this).find('id').text());
+            $('#product-id').text(productId);
+
+            var productName = $(this).find('name').text();
+            $('#product-name').text(productName)
+
             var productPrice = parseInt($(this).find('price').text());
             $('#product-price').text(productPrice.toLocaleString('vi-VN') + "đ");
+
             var productInformation = $(this).find('information').text();
             $('#product-information').text(productInformation);
+
             var productAboutBrand = $(this).find('about-brand').text();
             $('#product-about-brand').text(productAboutBrand);
+
             var productImageSrc = $(this).find('img').attr('src');
 
             $('#product-image-container').removeClass('translate-y-[600px]').addClass('translate-y-[-600px]');
@@ -382,6 +398,35 @@
             $("#plusButton").on("click", function () {
                 currentNumber++;
                 numberItem.text(currentNumber);
+            });
+        });
+
+        document.getElementById("numberItem").addEventListener("DOMSubtreeModified", function () {
+            var numberItem = document.getElementById("numberItem").innerHTML;
+            document.getElementById("numberItemInput").value = numberItem;
+        });
+        document.getElementById("product-id").addEventListener("DOMSubtreeModified", function () {
+            var idItem = document.getElementById("product-id").innerHTML;
+            document.getElementById("product-idInput").value = idItem;
+        });
+
+        $(function () {
+            $('button[type="submit"]').click(function (event) {
+                event.preventDefault(); // Ngăn chặn chuyển hướng đến trang AddToCart
+
+                var formData = $('form').serialize(); // Lấy dữ liệu từ form
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("AddToCart", "Home")',
+                    data: formData,
+                    success: function () {
+                        // Thông báo thêm sản phẩm vào giỏ hàng thành công
+                    },
+                    error: function () {
+                        // Thông báo lỗi khi thêm sản phẩm vào giỏ hàng
+                    }
+                });
             });
         });
     </script>

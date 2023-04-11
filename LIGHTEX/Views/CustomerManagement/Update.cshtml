@@ -34,7 +34,7 @@
             }
             else
             {
-                <img class="w-full h-full rounded-full border-3 border-[#333333] object-cover" src="data:image/png;base64,@(Convert.ToBase64String(customer.avatar))" alt="Avatar" />
+                <img class="w-full h-full rounded-full border-4 border-[#333333] object-cover" src="data:image/png;base64,@(Convert.ToBase64String(customer.avatar))" alt="Avatar" />
             }
         </div>
         <form method="post" action="@Url.Action("UpdateCustomer", "CustomerManagement")" enctype="multipart/form-data">

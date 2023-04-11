@@ -11,6 +11,12 @@
     var context = HttpContextAccessor?.HttpContext?.RequestServices.GetService(typeof(LIGHTEXContext)) as LIGHTEXContext;
     var username = HttpContextAccessor?.HttpContext?.User?.Identity?.Name;
     var admin = await context.Account.FirstOrDefaultAsync(c => c.username == username && c.permission == 1);
+    if (admin == null)
+    {
+        <script>
+            window.location.href = "/Login/Index";
+        </script>
+    }
 }
 
 <!DOCTYPE html>
@@ -36,19 +42,7 @@
                 </a>
             </div>
             <div class="flex items-center">
-                @{
-                    if (admin != null)
-                    {
-                        <p>Xin chào, <b>@admin.full_name</b></p>
-                    }
-                    else
-                    {
-                        <script>
-                            window.location.href = "/Login/Index";
-                        </script>
-                    }
-
-                }
+                <p>Xin chào, <b>@admin?.full_name</b></p>
             </div>
         </div>
     </header>
