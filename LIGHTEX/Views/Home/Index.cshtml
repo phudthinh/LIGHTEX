@@ -1,5 +1,4 @@
-﻿@model LIGHTEX.Models.Domain.Cart;
-@{
+﻿@{
     ViewData["Title"] = "Trang chủ";
     Layout = "_Layout";
 }
@@ -184,8 +183,8 @@
                     <form method="post" enctype="multipart/form-data" class="w-[50%] h-full flex items-center justify-center">
                         <div class="mt-[80%] flex items-center justify-center gap-10">
                             <div class="flex items-center justify-center gap-3">
-                                <input type="hidden" id="product-idInput" asp-for="id_product" value="@products.FirstOrDefault().Product.id_product" readonly />
-                                <input type="hidden" id="product-customer" asp-for="id_customer" value="@customer.id_customer" readonly />
+                                <input type="hidden" id="product-idInput" name="id_product" value="@products?.FirstOrDefault().Product.id_product" readonly />
+                                <input type="hidden" id="product-customer" name="id_customer" value="@customer?.id_customer" readonly />
                                 <input type="hidden" id="numberItemInput" name="quantity" value=1 />
                                 <div class="px-3 py-2 rounded-md text-center text-white bg-[#FFFFFF]/[.5] hover:bg-[#FFFFFF]/[.8] font-medium" id="minusButton">-</div>
                                 <p class="text-2xl font-normal text-start text-[#FFFFFF]" id="numberItem">1</p>
@@ -196,7 +195,7 @@
                             </button>
                         </div>
                     </form>
-                    <span class="absolute hover:scale-125 hover:cursor-pointer top-12 right-20 transition-all z-20">
+                    <span class="absolute hover:scale-125 hover:cursor-pointer top-12 right-20 transition-all z-20" id="favorite" data-customer="@customer?.id_customer" data-product="@products?.FirstOrDefault().Product.id_product" data-active="false">
                         <svg class="fill-[#FFFFFF] w-10 h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 81.72 67.92">
                             <path d="M293.88,395a2.15,2.15,0,1,1-3.63,2.32,15,15,0,0,0-12.42-6.18c-8.81,0-13.75,3.38-15.76,8.48a21.36,21.36,0,0,0-.93,10.46,43.6,43.6,0,0,0,3.71,12.56c6.41,14.23,19.56,27.72,32.57,27.78s26.19-13.55,32.6-27.78a44.56,44.56,0,0,0,3.71-12.56,21.72,21.72,0,0,0-.93-10.46c-2.05-5.1-6.95-8.48-15.76-8.48-18.23,0-18,18.17-18,18.23a2.16,2.16,0,0,1-4.31,0c0-.06-.29-22.56,22.31-22.56,10.88,0,17.09,4.47,19.75,11.22A25,25,0,0,1,338,410.63a47.81,47.81,0,0,1-4.05,13.8c-7,15.51-21.57,30.14-36.31,30.33h-.43c-14.74-.19-29.34-14.82-36.31-30.33a48.54,48.54,0,0,1-4.08-13.8,25.46,25.46,0,0,1,1.24-12.56c2.67-6.75,8.85-11.22,19.76-11.22A19.42,19.42,0,0,1,293.88,395Z" transform="translate(-256.57 -386.85)" />
                         </svg>
@@ -346,7 +345,6 @@
                 commentHtml += '<p class="text-sm text-justify text-[#FFFFFF]">' + obj.comment.content + '</p>';
                 commentHtml += '</div>';
                 commentHtml += '</div>';
-
             });
 
             $('#product-comment').html(commentHtml);
@@ -373,6 +371,32 @@
                 $('#product-image').attr('src', productImageSrc);
                 $('#product-image-container').removeClass('translate-y-[-600px]').addClass('translate-y-[600px]');
             }, 500);
+
+            var customerId = $('#favorite').data('customer');
+            var favoriteSpan = $('#favorite');
+
+            // Truy vấn cơ sở dữ liệu để kiểm tra trạng thái yêu thích của sản phẩm khi tải trang
+            if ('@customer' != '') {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CheckFavoriteStatus", "Home")',
+                    data: { customerId: customerId, productId: productId },
+                    success: function (data) {
+                        if (data.isFavorited) {
+                            favoriteSpan.addClass('active');
+                            favoriteSpan.attr('data-active', true);
+                            favoriteSpan.html('<svg class="fill-[#FFFFFF] w-10 h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 81.72 67.92"><path d="M387.75,452.51c2.53-6,8.08-12.47,20.18-12.47,10.89,0,17.1,4.48,19.76,11.23a25,25,0,0,1,1.22,12.55,47.87,47.87,0,0,1-4.05,13.81c-7,15.5-21.57,30.13-36.31,30.33h-.43c-14.74-.2-29.34-14.83-36.31-30.33a48.6,48.6,0,0,1-4.08-13.81A25.4,25.4,0,0,1,349,451.27c2.67-6.75,8.85-11.23,19.76-11.23a19.72,19.72,0,0,1,14.69,6.46h0c.42.46.73.88,1,1.19a41.25,41.25,0,0,1,3.34,4.82Z" transform="translate(-347.47 -440.04)" /></svg>');
+                        } else {
+                            favoriteSpan.removeClass('active');
+                            favoriteSpan.attr('data-active', false);
+                            favoriteSpan.html('<svg class="fill-[#FFFFFF] w-10 h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 81.72 67.92"><path d="M293.88,395a2.15,2.15,0,1,1-3.63,2.32,15,15,0,0,0-12.42-6.18c-8.81,0-13.75,3.38-15.76,8.48a21.36,21.36,0,0,0-.93,10.46,43.6,43.6,0,0,0,3.71,12.56c6.41,14.23,19.56,27.72,32.57,27.78s26.19-13.55,32.6-27.78a44.56,44.56,0,0,0,3.71-12.56,21.72,21.72,0,0,0-.93-10.46c-2.05-5.1-6.95-8.48-15.76-8.48-18.23,0-18,18.17-18,18.23a2.16,2.16,0,0,1-4.31,0c0-.06-.29-22.56,22.31-22.56,10.88,0,17.09,4.47,19.75,11.22A25,25,0,0,1,338,410.63a47.81,47.81,0,0,1-4.05,13.8c-7,15.51-21.57,30.14-36.31,30.33h-.43c-14.74-.19-29.34-14.82-36.31-30.33a48.54,48.54,0,0,1-4.08-13.8,25.46,25.46,0,0,1,1.24-12.56c2.67-6.75,8.85-11.22,19.76-11.22A19.42,19.42,0,0,1,293.88,395Z" transform="translate(-256.57 -386.85)" /></svg>');
+                        }
+                    },
+                    error: function () {
+                        // Thông báo lỗi khi truy vấn cơ sở dữ liệu không thành công
+                    }
+                });
+            }
         });
 
         $(document).ready(function () {
@@ -415,18 +439,84 @@
                 event.preventDefault(); // Ngăn chặn chuyển hướng đến trang AddToCart
 
                 var formData = $('form').serialize(); // Lấy dữ liệu từ form
+                if ('@customer' == '') {
+                    window.location.href = "/Login/Index";
+                } else {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("AddToCart", "Home")',
+                        data: formData,
+                        success: function () {
+                            // Thông báo thêm sản phẩm vào giỏ hàng thành công
+                        },
+                        error: function () {
+                            // Thông báo lỗi khi thêm sản phẩm vào giỏ hàng
+                        }
+                    });
+                }
+            });
+        });
+        $(document).ready(function () {
+            var customerId = $('#favorite').data('customer');
+            var productId = $('#favorite').data('product');
+            var favoriteSpan = $('#favorite');
 
+            // Truy vấn cơ sở dữ liệu để kiểm tra trạng thái yêu thích của sản phẩm khi tải trang
+            if ('@customer' != '') {
                 $.ajax({
                     type: 'POST',
-                    url: '@Url.Action("AddToCart", "Home")',
-                    data: formData,
-                    success: function () {
-                        // Thông báo thêm sản phẩm vào giỏ hàng thành công
+                    url: '@Url.Action("CheckFavoriteStatus", "Home")',
+                    data: { customerId: customerId, productId: productId },
+                    success: function (data) {
+                        if (data.isFavorited) {
+                            favoriteSpan.addClass('active');
+                            favoriteSpan.attr('data-active', true);
+                            favoriteSpan.html('<svg class="fill-[#FFFFFF] w-10 h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 81.72 67.92"><path d="M387.75,452.51c2.53-6,8.08-12.47,20.18-12.47,10.89,0,17.1,4.48,19.76,11.23a25,25,0,0,1,1.22,12.55,47.87,47.87,0,0,1-4.05,13.81c-7,15.5-21.57,30.13-36.31,30.33h-.43c-14.74-.2-29.34-14.83-36.31-30.33a48.6,48.6,0,0,1-4.08-13.81A25.4,25.4,0,0,1,349,451.27c2.67-6.75,8.85-11.23,19.76-11.23a19.72,19.72,0,0,1,14.69,6.46h0c.42.46.73.88,1,1.19a41.25,41.25,0,0,1,3.34,4.82Z" transform="translate(-347.47 -440.04)" /></svg>');
+                        } else {
+                            favoriteSpan.removeClass('active');
+                            favoriteSpan.attr('data-active', false);
+                            favoriteSpan.html('<svg class="fill-[#FFFFFF] w-10 h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 81.72 67.92"><path d="M293.88,395a2.15,2.15,0,1,1-3.63,2.32,15,15,0,0,0-12.42-6.18c-8.81,0-13.75,3.38-15.76,8.48a21.36,21.36,0,0,0-.93,10.46,43.6,43.6,0,0,0,3.71,12.56c6.41,14.23,19.56,27.72,32.57,27.78s26.19-13.55,32.6-27.78a44.56,44.56,0,0,0,3.71-12.56,21.72,21.72,0,0,0-.93-10.46c-2.05-5.1-6.95-8.48-15.76-8.48-18.23,0-18,18.17-18,18.23a2.16,2.16,0,0,1-4.31,0c0-.06-.29-22.56,22.31-22.56,10.88,0,17.09,4.47,19.75,11.22A25,25,0,0,1,338,410.63a47.81,47.81,0,0,1-4.05,13.8c-7,15.51-21.57,30.14-36.31,30.33h-.43c-14.74-.19-29.34-14.82-36.31-30.33a48.54,48.54,0,0,1-4.08-13.8,25.46,25.46,0,0,1,1.24-12.56c2.67-6.75,8.85-11.22,19.76-11.22A19.42,19.42,0,0,1,293.88,395Z" transform="translate(-256.57 -386.85)" /></svg>');
+                        }
                     },
                     error: function () {
-                        // Thông báo lỗi khi thêm sản phẩm vào giỏ hàng
+                        // Thông báo lỗi khi truy vấn cơ sở dữ liệu không thành công
                     }
                 });
+            }
+
+            // Sự kiện click để thêm hoặc xoá sản phẩm khỏi danh sách yêu thích
+            $('#favorite').click(function (event) {
+                event.preventDefault();
+                var customerId = $('#favorite').data('customer');
+                var productId = $('#product-id').text();
+                var favoriteSpan = $('#favorite');
+                favoriteSpan.attr('data-product', productId);
+                var active = $('#favorite').data('active');
+                active = !active;
+                if ('@customer' == '') {
+                    window.location.href = "/Login/Index";
+                } else {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("ToggleFavorite", "Home")',
+                        data: { customerId: customerId, productId: productId, active: active },
+                        success: function (result) {
+                            $('#favorite').data('active', active);
+                            if (active) {
+                                favoriteSpan.addClass('active');
+                                favoriteSpan.attr('data-active', true);
+                                favoriteSpan.html('<svg class="fill-[#FFFFFF] w-10 h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 81.72 67.92"><path d="M387.75,452.51c2.53-6,8.08-12.47,20.18-12.47,10.89,0,17.1,4.48,19.76,11.23a25,25,0,0,1,1.22,12.55,47.87,47.87,0,0,1-4.05,13.81c-7,15.5-21.57,30.13-36.31,30.33h-.43c-14.74-.2-29.34-14.83-36.31-30.33a48.6,48.6,0,0,1-4.08-13.81A25.4,25.4,0,0,1,349,451.27c2.67-6.75,8.85-11.23,19.76-11.23a19.72,19.72,0,0,1,14.69,6.46h0c.42.46.73.88,1,1.19a41.25,41.25,0,0,1,3.34,4.82Z" transform="translate(-347.47 -440.04)" /></svg>');
+                            } else {
+                                favoriteSpan.removeClass('active');
+                                favoriteSpan.attr('data-active', false);
+                                favoriteSpan.html('<svg class="fill-[#FFFFFF] w-10 h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 81.72 67.92"><path d="M293.88,395a2.15,2.15,0,1,1-3.63,2.32,15,15,0,0,0-12.42-6.18c-8.81,0-13.75,3.38-15.76,8.48a21.36,21.36,0,0,0-.93,10.46,43.6,43.6,0,0,0,3.71,12.56c6.41,14.23,19.56,27.72,32.57,27.78s26.19-13.55,32.6-27.78a44.56,44.56,0,0,0,3.71-12.56,21.72,21.72,0,0,0-.93-10.46c-2.05-5.1-6.95-8.48-15.76-8.48-18.23,0-18,18.17-18,18.23a2.16,2.16,0,0,1-4.31,0c0-.06-.29-22.56,22.31-22.56,10.88,0,17.09,4.47,19.75,11.22A25,25,0,0,1,338,410.63a47.81,47.81,0,0,1-4.05,13.8c-7,15.51-21.57,30.14-36.31,30.33h-.43c-14.74-.19-29.34-14.82-36.31-30.33a48.54,48.54,0,0,1-4.08-13.8,25.46,25.46,0,0,1,1.24-12.56c2.67-6.75,8.85-11.22,19.76-11.22A19.42,19.42,0,0,1,293.88,395Z" transform="translate(-256.57 -386.85)" /></svg>');
+                            }
+                        },
+                        error: function () {
+                            // Thông báo lỗi khi thao tác với cơ sở dữ liệu không thành công
+                        }
+                    });
+                }
             });
         });
     </script>

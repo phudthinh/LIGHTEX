@@ -165,6 +165,37 @@ namespace LIGHTEX.Controllers
             return Json(new { success = true });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ToggleFavorite(int customerId, int productId, bool active)
+        {
+            var favorite = await _context.Favorite.FirstOrDefaultAsync(f => f.id_customer == customerId && f.id_product == productId);
+            if (favorite == null)
+            {
+                // Nếu không tìm thấy dữ liệu yêu thích, tạo mới đối tượng Favorite
+                favorite = new Favorite()
+                {
+                    id_customer = customerId,
+                    id_product = productId,
+                    active = true
+                };
+                _context.Favorite.Add(favorite);
+            }
+            else
+            {
+                // Cập nhật trạng thái yêu thích nếu tìm thấy đối tượng Favorite
+                favorite.active = active;
+                _context.Entry(favorite).State = EntityState.Modified;
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        public JsonResult CheckFavoriteStatus(int customerId, int productId)
+        {
+            var favorite = _context.Favorite.FirstOrDefault(f => f.id_customer == customerId && f.id_product == productId);
+            bool isFavorited = favorite != null ? favorite.active : false;
+
+            return Json(new { isFavorited = isFavorited });
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
