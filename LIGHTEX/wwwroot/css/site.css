@@ -127,7 +127,12 @@ select {
 ::-webkit-scrollbar-thumb:hover {
     background: #6D7CD3;
 }
-
+.cannot__select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 input[type="number"] {
     -webkit-appearance: textfield;
     -moz-appearance: textfield;
@@ -183,6 +188,20 @@ input:-webkit-autofill:focus {
 }
 .cart:hover .show__cart{
     display: block;
+}
+.cart__item {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    text-overflow: ellipsis;
+}
+.cart__item-information {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text-overflow: ellipsis;
 }
 .account:hover .show__account {
     display: block;

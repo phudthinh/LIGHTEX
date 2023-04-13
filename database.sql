@@ -62,6 +62,7 @@ CREATE TABLE PRODUCT
     information NVARCHAR(500) NOT NULL,
     price FLOAT DEFAULT 0 NOT NULL,
     image VARBINARY(MAX) NOT NULL,
+	effect INT DEFAULT 0 NOT NULL,
     status BIT NOT NULL,
     create_date DATETIME NOT NULL,
     modified_date DATETIME NOT NULL,
@@ -95,28 +96,28 @@ CREATE TABLE CART_DETAIL
 );
 GO
 
+CREATE TABLE BILL_DETAIL
+(
+    id_bill_detail INT IDENTITY NOT NULL,
+	id_customer INT NOT NULL,
+    id_product INT NOT NULL,
+    quantity INT NOT NULL,
+    CONSTRAINT PK_BILL_DETAIL_id_bill_detail PRIMARY KEY (id_bill_detail),
+    FOREIGN KEY (id_customer) REFERENCES CUSTOMER(id_customer),
+    FOREIGN KEY (id_product) REFERENCES PRODUCT(id_product)
+);
+GO
+
 CREATE TABLE BILL
 (
     id_bill INT IDENTITY NOT NULL,
-    id_customer INT NOT NULL,
+    id_bill_detail INT NOT NULL,
     total FLOAT DEFAULT 0 NOT NULL,
     status INT NOT NULL,
     create_date DATETIME NOT NULL,
     ship_date DATETIME NOT NULL,
     CONSTRAINT PK_BILL_id_bill PRIMARY KEY (id_bill),
-    FOREIGN KEY (id_customer) REFERENCES CUSTOMER(id_customer)
-);
-GO
-
-CREATE TABLE BILL_DETAIL
-(
-    id_bill_detail INT IDENTITY NOT NULL,
-    id_bill INT NOT NULL,
-    id_product INT NOT NULL,
-    quantity INT NOT NULL,
-    CONSTRAINT PK_BILL_DETAIL_id_bill_detail PRIMARY KEY (id_bill_detail),
-    FOREIGN KEY (id_bill) REFERENCES BILL(id_bill),
-    FOREIGN KEY (id_product) REFERENCES PRODUCT(id_product)
+    FOREIGN KEY (id_bill_detail) REFERENCES BILL_DETAIL(id_bill_detail)
 );
 GO
 

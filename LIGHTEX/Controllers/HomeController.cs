@@ -8,6 +8,7 @@ using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Claims;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace LIGHTEX.Controllers
@@ -43,6 +44,42 @@ namespace LIGHTEX.Controllers
         {
             return View();
         }
+        public IActionResult Cart()
+        {
+            return View();
+        }
+        public IActionResult GetCartCount(int id)
+        {
+            var cartCount = _context.Cart.Where(c => c.id_customer == id).Count();
+            return Json(cartCount);
+        }
+        public async Task<IActionResult> GetCartList(int id_customer)
+        {
+            var carts = await _context.Cart
+            .Where(c => c.id_customer == id_customer)
+            .Select(c => new
+            {
+                Cart = c,
+                Product = _context.Product.FirstOrDefault(p => p.id_product == c.id_product)
+            })
+            .ToListAsync();
+            return Json(carts);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteCart(int id_cart)
+        {
+            var cart = await _context.Cart.FindAsync(id_cart);
+            if (cart == null)
+            {
+                return NotFound();
+            }
+
+            _context.Cart.Remove(cart);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
         [HttpPost]
         public async Task<IActionResult> UpdateCustomer(CustomerViewModel update, IFormFile image)
         {
@@ -134,7 +171,7 @@ namespace LIGHTEX.Controllers
                 {
                     customer.money = newMoney;
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Pay", "Home");
                 }
             }
         }

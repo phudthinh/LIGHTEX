@@ -3,6 +3,7 @@
 @using LIGHTEX.Data
 @using Microsoft.AspNetCore.Http
 @using System.Diagnostics;
+@using System.Globalization;
 @using System.Linq;
 @using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,19 @@
     var username = HttpContextAccessor?.HttpContext?.User?.Identity?.Name;
     var account = await context.Account.FirstOrDefaultAsync(c => c.username == username);
     var customer = await context.Customer.FirstOrDefaultAsync(c => c.username == username);
+
+    var id_customer = 0;
+    if (customer != null)
+    {
+        id_customer = customer.id_customer;
+    }
+    var carts = await context.Cart
+        .Where(c => c.id_customer == id_customer)
+        .Join(context.Product,
+            cart => cart.id_product,
+            product => product.id_product,
+            (cart, product) => new { Cart = cart, Product = product })
+        .ToListAsync();
 }
 
 <!DOCTYPE html>
@@ -87,82 +101,64 @@
                         if (account.permission == 0)
                         {
                             <div class="relative cart">
-                                <div class="absolute hover:cursor-pointer w-10 h-4 right-0 bottom-[-16px]"></div>
-                                <div class="absolute w-5 h-5 right-[-2px] top-[-10px] bg-[#FF6827] rounded-full z-10 flex items-center justify-center">
-                                    <p class="text-xs text-[#FFFFFF] text-center">9+</p>
-                                </div>
-                                <div class="mx-2 w-auto h-6 md:hover:scale-125 hover:cursor-pointer transition-all">
-                                    <svg class="fill-[#333333] w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 77.53 90.57">
-                                        <path d="M934.92,494.86H984.1A14.22,14.22,0,0,1,998.28,509v62.22a14.22,14.22,0,0,1-14.18,14.17H934.92a14.2,14.2,0,0,1-14.17-14.17V509a14.2,14.2,0,0,1,14.17-14.17Zm3.77,18.53a2.12,2.12,0,0,1,1.87-2.4,2.16,2.16,0,0,1,2.41,1.89c0,.06,2,17.41,17.18,17.41s15.9-17.35,15.9-17.38a2.16,2.16,0,0,1,4.31.23c0,.06-1,21.49-20.21,21.49s-21.46-21.18-21.46-21.24Zm45.41-14.2H934.92a9.88,9.88,0,0,0-9.84,9.84v53.18h68.86V509a9.87,9.87,0,0,0-9.84-9.84Zm9.84,67.35H925.08v4.71a9.9,9.9,0,0,0,9.84,9.84H984.1a9.88,9.88,0,0,0,9.84-9.84Z" transform="translate(-920.75 -494.86)" />
-                                    </svg>
-                                </div>
-                                <div class="show__cart absolute w-80 h-max bg-white top-10 right-0 rounded-lg shadow hidden">
-                                    <div class="flex w-full px-4 py-2 hover:bg-[#cccccc] first:rounded-t-lg last:rounded-b-lg">
-                                        <div class="flex justify-between w-full gap-4">
-                                            <img class="w-10 h-10" src="~/assets/logo.png" />
-                                            <div class="flex justify-between w-full">
-                                                <div>
-                                                    <p>Sản phẩm</p>
-                                                    <p>Mô tả</p>
-                                                </div>
-                                                <div>
-                                                    <div class="flex gap-1 items-end">
-                                                        <p class="text-base text-[#FF6827]">150.000đ</p>
-                                                        <p class="text-sm">x</p>
-                                                        <p class="text-sm">2</p>
+                                <a asp-area="" asp-controller="Home" asp-action="Cart">
+
+                                    <div class="absolute hover:cursor-pointer w-10 h-4 right-0 bottom-[-16px]"></div>
+                                    <div class="absolute w-5 h-5 right-[-2px] top-[-10px] bg-[#FF6827] rounded-full z-10 flex items-center justify-center cart-count-pop" style="display: hidden">
+                                        <p class="text-xs text-[#FFFFFF] text-center cart-count">@(carts.Count > 5 ? "5+" : carts.Count.ToString())</p>
+                                    </div>
+                                    <div class="mx-2 w-auto h-6 md:hover:scale-125 hover:cursor-pointer transition-all">
+                                        <svg class="fill-[#333333] w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 77.53 90.57">
+                                            <path d="M934.92,494.86H984.1A14.22,14.22,0,0,1,998.28,509v62.22a14.22,14.22,0,0,1-14.18,14.17H934.92a14.2,14.2,0,0,1-14.17-14.17V509a14.2,14.2,0,0,1,14.17-14.17Zm3.77,18.53a2.12,2.12,0,0,1,1.87-2.4,2.16,2.16,0,0,1,2.41,1.89c0,.06,2,17.41,17.18,17.41s15.9-17.35,15.9-17.38a2.16,2.16,0,0,1,4.31.23c0,.06-1,21.49-20.21,21.49s-21.46-21.18-21.46-21.24Zm45.41-14.2H934.92a9.88,9.88,0,0,0-9.84,9.84v53.18h68.86V509a9.87,9.87,0,0,0-9.84-9.84Zm9.84,67.35H925.08v4.71a9.9,9.9,0,0,0,9.84,9.84H984.1a9.88,9.88,0,0,0,9.84-9.84Z" transform="translate(-920.75 -494.86)" />
+                                        </svg>
+                                    </div>
+                                </a>
+                                <div class="show__cart absolute w-80 h-max bg-white top-10 right-0 rounded-lg shadow hidden cart-list">
+                                    @foreach (var cart in carts.Take(5))
+                                    {
+                                        <div class="flex w-full px-4 py-2 hover:bg-[#cccccc] first:rounded-t-lg last:rounded-b-lg">
+                                            <div class="flex justify-between w-full gap-4">
+                                                <img class="w-10 h-10 object-cover" src="data:image/png;base64,@(Convert.ToBase64String(cart.Product.image))" alt="Image" />
+                                                <div class="flex justify-between w-full">
+                                                    <div>
+                                                        <p>@cart.Product.name</p>
+                                                        <p class="cart__item">@cart.Product.information</p>
                                                     </div>
-                                                    <a class="hover:cursor-pointer">
-                                                        <p class="text-right hover:text-[#FF6827]">Xóa</p>
-                                                    </a>
+                                                    <div>
+                                                        <div class="flex gap-1 items-end">
+                                                            <p class="text-base text-[#FF6827]">@cart.Product.price.ToString("N0", CultureInfo.CreateSpecificCulture("de-DE")).Replace(",", ".")đ</p>
+                                                            <p class="text-sm">x</p>
+                                                            <p class="text-sm">@cart.Cart.quantity</p>
+                                                        </div>
+                                                        <a class="hover:cursor-pointer delete-cart" data-id-cart="@cart.Cart.id_cart">
+                                                            <p class="text-right hover:text-[#FF6827]">Xóa</p>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
                                 </div>
                             </div>
+
                         }
                     }
                     else
                     {
-                        <div class="relative cart">
-                            <div class="absolute hover:cursor-pointer w-10 h-4 right-0 bottom-[-16px]"></div>
-                            <div class="absolute w-5 h-5 right-[-2px] top-[-10px] bg-[#FF6827] rounded-full z-10 flex items-center justify-center">
-                                <p class="text-xs text-[#FFFFFF] text-center">9+</p>
-                            </div>
+                        <a asp-area="" asp-controller="Login" asp-action="Index" class="relative cart">
                             <div class="mx-2 w-auto h-6 md:hover:scale-125 hover:cursor-pointer transition-all">
                                 <svg class="fill-[#333333] w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 77.53 90.57">
                                     <path d="M934.92,494.86H984.1A14.22,14.22,0,0,1,998.28,509v62.22a14.22,14.22,0,0,1-14.18,14.17H934.92a14.2,14.2,0,0,1-14.17-14.17V509a14.2,14.2,0,0,1,14.17-14.17Zm3.77,18.53a2.12,2.12,0,0,1,1.87-2.4,2.16,2.16,0,0,1,2.41,1.89c0,.06,2,17.41,17.18,17.41s15.9-17.35,15.9-17.38a2.16,2.16,0,0,1,4.31.23c0,.06-1,21.49-20.21,21.49s-21.46-21.18-21.46-21.24Zm45.41-14.2H934.92a9.88,9.88,0,0,0-9.84,9.84v53.18h68.86V509a9.87,9.87,0,0,0-9.84-9.84Zm9.84,67.35H925.08v4.71a9.9,9.9,0,0,0,9.84,9.84H984.1a9.88,9.88,0,0,0,9.84-9.84Z" transform="translate(-920.75 -494.86)" />
                                 </svg>
                             </div>
-                            <div class="show__cart absolute w-80 h-max bg-white top-10 right-0 rounded-lg shadow hidden">
-                                <div class="flex w-full px-4 py-2 hover:bg-[#cccccc] first:rounded-t-lg last:rounded-b-lg">
-                                    <div class="flex justify-between w-full gap-4">
-                                        <img class="w-10 h-10" src="~/assets/logo.png" />
-                                        <div class="flex justify-between w-full">
-                                            <div>
-                                                <p>Sản phẩm</p>
-                                                <p>Mô tả</p>
-                                            </div>
-                                            <div>
-                                                <div class="flex gap-1 items-end">
-                                                    <p class="text-base text-[#FF6827]">150.000đ</p>
-                                                    <p class="text-sm">x</p>
-                                                    <p class="text-sm">2</p>
-                                                </div>
-                                                <a class="hover:cursor-pointer">
-                                                    <p class="text-right hover:text-[#FF6827]">Xóa</p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </a>
                     }
                 }
                 @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                 {
+                    
                     <div class="relative account block">
+                        <a asp-area="" asp-controller="Home" asp-action="Information">
                         <div class="absolute w-20 h-4 right-0 bottom-[-16px] hover:cursor-pointer"></div>
                         @if (customer != null)
                         {
@@ -187,6 +183,7 @@
                                 </div>
                             }
                         }
+                        </a>
                         <div class="show__account absolute w-48 h-max bg-white top-10 right-0 rounded-lg shadow hidden">
                             @{
                                 if (account != null)
@@ -293,6 +290,79 @@
                     }
                 });
         }
+        $(document).ready(function () {
+            setInterval(function () {
+                $.ajax({
+
+                    url: '/Home/GetCartCount?id=' + '@id_customer',
+                    type: 'GET',
+                    success: function (data) {
+                        if (data > 0) {
+                            $('.cart-count').text(data);
+                            if (data > 5) {
+                                $('.cart-count').text('5+');
+                            }
+                            $('.cart-count-pop').show();
+                        } else {
+                            $('.cart-count-pop').hide();
+                        }
+                    }
+                });
+            }, 1000);
+        });
+        $(document).ready(function () {
+            setInterval(function () {
+                $.ajax({
+                    url: '/Home/GetCartList?id_customer=' + '@id_customer',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        data = data.slice(0, 5);
+                        $('.cart-list').empty();
+                        $.each(data, function (index, cart) {
+                            const price = cart.product.price;
+                            const formattedPrice = price.toLocaleString('de-DE');
+                            var itemHtml = `<div class="flex w-full px-4 py-2 hover:bg-[#cccccc] first:rounded-t-lg last:rounded-b-lg">
+                                            <div class="flex justify-between w-full gap-4">
+                                                <img class="w-10 h-10 object-cover" src="data:image/png;base64,${cart.product.image}" alt="Image" />
+                                                <div class="flex justify-between w-full">
+                                                    <div>
+                                                        <p>${cart.product.name}</p>
+                                                        <p class="cart__item">${cart.product.information}</p>
+                                                    </div>
+                                                    <div>
+                                                        <div class="flex gap-1 items-end">
+                                                            <p class="text-base text-[#FF6827]">${formattedPrice}đ</p>
+                                                            <p class="text-sm">x</p>
+                                                            <p class="text-sm">${cart.cart.quantity}</p>
+                                                        </div>
+                                                        <a class="hover:cursor-pointer delete-cart" data-id-cart="${cart.cart.id_cart}">
+                                                            <p class="text-right hover:text-[#FF6827]">Xóa</p>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          </div>`;
+                            $('.cart-list').append(itemHtml);
+                        });
+                    }
+                });
+            }, 1000);
+        });
+        $('.cart-list').on('click', '.delete-cart', function () {
+            var id_cart = $(this).data('id-cart');
+            $.ajax({
+                url: '/Home/DeleteCart',
+                type: 'POST',
+                data: { id_cart: id_cart },
+                success: function () {
+                    // Refresh cart list
+                },
+                error: function () {
+                    alert('Error deleting cart');
+                }
+            });
+        });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

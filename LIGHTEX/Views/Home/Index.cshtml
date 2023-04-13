@@ -19,6 +19,7 @@
     var categories = await context.Category.ToListAsync();
     var categoryFirst = await context.Category.FirstOrDefaultAsync();
     var username = HttpContextAccessor?.HttpContext?.User?.Identity?.Name;
+    var account = await context.Account.FirstOrDefaultAsync(c => c.username == username);
     var customer = await context.Customer.FirstOrDefaultAsync(c => c.username == username);
     var products = await context.Product
                     .Join(context.Brand, p => p.id_brand, b => b.id_brand, (p, b) => new { Product = p, Brand = b })
@@ -186,11 +187,11 @@
                                 <input type="hidden" id="product-idInput" name="id_product" value="@products?.FirstOrDefault().Product.id_product" readonly />
                                 <input type="hidden" id="product-customer" name="id_customer" value="@customer?.id_customer" readonly />
                                 <input type="hidden" id="numberItemInput" name="quantity" value=1 />
-                                <div class="px-3 py-2 rounded-md text-center text-white bg-[#FFFFFF]/[.5] hover:bg-[#FFFFFF]/[.8] font-medium" id="minusButton">-</div>
+                                <div class="px-3 py-2 rounded-md text-center text-white bg-[#FFFFFF]/[.5] hover:bg-[#FFFFFF]/[.8] font-medium hover:cursor-pointer cannot__select" id="minusButton">-</div>
                                 <p class="text-2xl font-normal text-start text-[#FFFFFF]" id="numberItem">1</p>
-                                <div class="px-3 py-2 rounded-md text-center text-white bg-[#FFFFFF]/[.5] hover:bg-[#FFFFFF]/[.8] font-medium" id="plusButton">+</div>
+                                <div class="px-3 py-2 rounded-md text-center text-white bg-[#FFFFFF]/[.5] hover:bg-[#FFFFFF]/[.8] font-medium hover:cursor-pointer cannot__select" id="plusButton">+</div>
                             </div>
-                            <button type="submit" class="px-4 py-2 rounded-md text-center text-white bg-[#FF6827] hover:bg-[#FF6827]/[.9] font-medium">
+                            <button type="submit" class="px-4 py-2 rounded-md text-center text-white bg-[#FF6827] hover:bg-[#FF6827]/[.9] font-medium cannot__select">
                                 Thêm vào giỏ hàng
                             </button>
                         </div>
@@ -300,8 +301,6 @@
             });
         });
 
-
-
         $(document).on('click', '.products', function () {
             var productComment = $(this).find('.product-comment').text();
             var objList = JSON.parse(productComment);
@@ -376,7 +375,7 @@
             var favoriteSpan = $('#favorite');
 
             // Truy vấn cơ sở dữ liệu để kiểm tra trạng thái yêu thích của sản phẩm khi tải trang
-            if ('@customer' != '') {
+            if ('@customer' != '' && '@account?.permission' == '0') {
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("CheckFavoriteStatus", "Home")',
@@ -439,7 +438,7 @@
                 event.preventDefault(); // Ngăn chặn chuyển hướng đến trang AddToCart
 
                 var formData = $('form').serialize(); // Lấy dữ liệu từ form
-                if ('@customer' == '') {
+                if ('@customer' == '' || '@account?.permission' != '0') {
                     window.location.href = "/Login/Index";
                 } else {
                     $.ajax({
@@ -462,7 +461,7 @@
             var favoriteSpan = $('#favorite');
 
             // Truy vấn cơ sở dữ liệu để kiểm tra trạng thái yêu thích của sản phẩm khi tải trang
-            if ('@customer' != '') {
+            if ('@customer' != '' && '@account?.permission' == '0') {
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("CheckFavoriteStatus", "Home")',
@@ -493,7 +492,7 @@
                 favoriteSpan.attr('data-product', productId);
                 var active = $('#favorite').data('active');
                 active = !active;
-                if ('@customer' == '') {
+                if ('@customer' == '' || '@account?.permission' != '0') {
                     window.location.href = "/Login/Index";
                 } else {
                     $.ajax({

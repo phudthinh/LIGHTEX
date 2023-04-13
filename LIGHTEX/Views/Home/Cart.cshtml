@@ -1,0 +1,124 @@
+﻿@model LIGHTEX.Models.CustomerViewModel;
+@{
+    ViewData["Title"] = "Nạp tiền";
+    Layout = "_Layout";
+}
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using System.Security.Claims
+@using LIGHTEX.Data
+@using Microsoft.AspNetCore.Http
+@using System.Diagnostics;
+@using System.Globalization;
+@using System.Linq;
+@using Microsoft.EntityFrameworkCore;
+
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    int count = 0;
+    var context = HttpContextAccessor?.HttpContext?.RequestServices.GetService(typeof(LIGHTEXContext)) as LIGHTEXContext;
+    var username = HttpContextAccessor?.HttpContext?.User?.Identity?.Name;
+    var account = await context.Account.FirstOrDefaultAsync(c => c.username == username && c.permission == 0);
+    var customer = await context.Customer.FirstOrDefaultAsync(c => c.username == username);
+    var id_customer = 0;
+    if (customer != null)
+    {
+        id_customer = customer.id_customer;
+    }
+    var carts = await context.Cart
+        .Where(c => c.id_customer == id_customer)
+        .Join(context.Product,
+            cart => cart.id_product,
+            product => product.id_product,
+            (cart, product) => new { Cart = cart, Product = product })
+        .ToListAsync();
+    if (account == null)
+    {
+        <script>
+            window.location.href = "/Login/Index";
+        </script>
+    }
+}
+<body>
+    <div class="container mx-auto px-4 flex flex-col justify-center w-full h-full py-10">
+        <h1 class="text-2xl lg:text-4xl text-black font-bold mb-4 text-center">Giỏ hàng</h1>
+        <button>Thanh toán</button>
+        <div class="rounded-lg overflow-hidden">
+            <table >
+                <thead>
+                    <tr >
+                        <td><input type="checkbox" class="h-5 w-5"></td>
+                        <th>Sản phẩm</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th>Số tiền</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cart in carts)
+                    {
+                        <tr>
+                            <td><input type="checkbox" class="h-5 w-5"></td>
+                            <td>
+                                <img src="data:image/png;base64,@(Convert.ToBase64String(cart.Product.image))" alt="image" />
+                                <div>
+                                    <p>@cart.Product.name</p>
+                                    <p>@cart.Product.information</p>
+                                </div>
+                            </td>
+                            <td><p>@cart.Product.price.ToString("N0", CultureInfo.CreateSpecificCulture("de-DE")).Replace(",", ".")đ</p></td>
+                            <td>
+                                <div>
+                                    <div id="minusButton">-</div>
+                                    <p id="numberItem">@cart.Cart.quantity</p>
+                                    <div id="plusButton">+</div>
+                                </div>
+                            </td>
+                            <td><p>@cart.Product.price.ToString("N0", CultureInfo.CreateSpecificCulture("de-DE")).Replace(",", ".")đ</p></td>
+                            <td>
+                                <div data-cart-id="@cart.Cart.id_cart">
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var numberItem = $("#numberItem");
+            var currentNumber = parseInt(numberItem.text());
+            $("#minusButton").on("click", function () {
+                if (currentNumber > 1) {
+                    currentNumber--;
+                    numberItem.text(currentNumber);
+                }
+            });
+            $("#plusButton").on("click", function () {
+                currentNumber++;
+                numberItem.text(currentNumber);
+            });
+        });
+
+        $(document).ready(function () {
+            $(document).on('click', '.delete-cart', function () {
+                var cartId = $(this).data("cart-id");
+                $.ajax({
+                    url: "@Url.Action("DeleteCart", "Home")",
+                    type: "POST",
+                    data: { id_cart: cartId },
+                    success: function () {
+                        window.location.reload();
+                    },
+                    error: function () {
+                        alert("Có lỗi xảy ra khi xóa cart!");
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>

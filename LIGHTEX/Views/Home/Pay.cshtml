@@ -8,6 +8,7 @@
 @using LIGHTEX.Data
 @using Microsoft.AspNetCore.Http
 @using System.Diagnostics;
+@using System.Globalization;
 @using System.Linq;
 @using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,10 @@
 
     <div class="container mx-auto px-4 flex flex-col justify-center w-full md:w-[80%] lg:w-[30%] h-full py-10">
         <h1 class="text-2xl lg:text-4xl text-black font-bold mb-4 text-center">Nạp tiền</h1>
+        <div class="flex gap-2">
+            <p class="text-base text-black font-bold my-2 text-start">Số dư tài khoản: </p>
+            <p class="text-base text-gray-600 font-normal my-2 text-start">@customer.money.ToString("N0", CultureInfo.CreateSpecificCulture("de-DE")).Replace(",", ".")đ</p>
+        </div>
         <form method="post" action="@Url.Action("Pay", "Home")" enctype="multipart/form-data">
             <div class="mt-3 w-full hidden">
                 <input type="text" placeholder="Tài khoản" asp-for="username" value="@account?.username" readonly
