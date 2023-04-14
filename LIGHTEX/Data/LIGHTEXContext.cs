@@ -23,5 +23,6 @@ namespace LIGHTEX.Data
         public DbSet<Comment> Comment { get; set; }
         public DbSet<Cart> Cart { get; set; }
         public DbSet<Favorite> Favorite { get; set; }
+        public DbSet<Bill> Bill { get; set; }
     }
 }

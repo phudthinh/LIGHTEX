@@ -3,10 +3,11 @@
     ViewData["Title"] = "Thông tin cá nhân";
     Layout = "_Layout";
 }
-@using Microsoft.AspNetCore.Authentication.Cookies
-@using System.Security.Claims
-@using LIGHTEX.Data
-@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Authentication.Cookies;
+@using System.Security.Claims;
+@using LIGHTEX.Data;
+@using Microsoft.AspNetCore.Http;
+@using System.Globalization;
 @using System.Diagnostics;
 @using System.Linq;
 @using Microsoft.EntityFrameworkCore;
@@ -94,6 +95,10 @@
                                        class="bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-[30%]">
                                 <input type="text" placeholder="Thành phố" asp-for="city" value="@customer.city"
                                        class="bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-[30%]">
+                            </div>
+                            <div class="mt-3 w-full flex gap-2 justify-start">
+                                <p class="text-base text-black font-bold my-2 text-start">Số dư tài khoản: </p>
+                                <p class="text-base text-gray-600 font-normal my-2 text-start">@customer.money.ToString("N0", CultureInfo.CreateSpecificCulture("de-DE")).Replace(",", ".")đ</p>
                             </div>
                             @if (ViewBag.ErrorMessage != null)
                             {

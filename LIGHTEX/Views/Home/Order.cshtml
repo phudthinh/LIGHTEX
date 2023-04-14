@@ -1,0 +1,154 @@
+﻿@model LIGHTEX.Models.CustomerViewModel;
+@{
+    ViewData["Title"] = "Đơn mua";
+    Layout = "_Layout";
+}
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using System.Security.Claims
+@using LIGHTEX.Data
+@using Microsoft.AspNetCore.Http
+@using System.Diagnostics;
+@using System.Globalization;
+@using System.Linq;
+@using Microsoft.EntityFrameworkCore;
+
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    int count = 0;
+    var context = HttpContextAccessor?.HttpContext?.RequestServices.GetService(typeof(LIGHTEXContext)) as LIGHTEXContext;
+    var username = HttpContextAccessor?.HttpContext?.User?.Identity?.Name;
+    var account = await context.Account.FirstOrDefaultAsync(c => c.username == username && c.permission == 0);
+    var customer = await context.Customer.FirstOrDefaultAsync(c => c.username == username);
+    var id_customer = 0;
+    if (customer != null)
+    {
+        id_customer = customer.id_customer;
+    }
+    var bills = await context.Bill
+        .Where(c => c.id_customer == id_customer)
+        .Join(context.Product,
+            bill => bill.id_product,
+            product => product.id_product,
+            (bill, product) => new { Bill = bill, Product = product })
+        .ToListAsync();
+    if (account == null)
+    {
+        <script>
+            window.location.href = "/Login/Index";
+        </script>
+    }
+}
+<body>
+    <div class="container mx-auto px-4 flex flex-col justify-center w-full h-full py-10">
+        <h1 class="text-2xl lg:text-4xl text-black font-bold mb-4 text-center">Đơn mua</h1>
+        <form method="post" action="@Url.Action("Checkout", "Home")">
+            <input type="hidden" name="id_customer" value="@customer.id_customer" />
+            <div class="rounded-lg overflow-hidden">
+                <table class="w-full">
+                    <thead>
+                        <tr class="h-14 w-full bg-[#6D7CD3] text-[#FFFFFF]">
+                            <th class="w-[30%] px-3 py-1 text-center">Sản phẩm</th>
+                            <th class="w-[15%] px-3 py-1 text-start">Tổng tiền</th>
+                            <th class="w-[15%] px-3 py-1 text-start">Thời gian dự kiến</th>
+                            <th class="w-[15%] px-3 py-1 text-start">Hình thức thanh toán</th>
+                            <th class="w-[15%] px-3 py-1 text-start">Trạng thái</th>
+                            <th class="w-[10%] px-3 py-1 text-start"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="bill-list">
+                        @foreach (var bill in bills)
+                        {
+                            <tr class="h-14 w-full last:rounded-b-lg @(count++ % 2 == 0 ? "bg-[#ececec]" : "bg-[#FFFFFF] border-y border-[#cccccc]")">
+                                <td class="w-full px-3 py-1 flex gap-2">
+                                    <img class="w-20 h-auto" src="data:image/png;base64,@(Convert.ToBase64String(bill.Product.image))" alt="image" />
+                                    <div class="flex flex-col h-20">
+                                        <p class="hidden md:block overflow-hidden overflow-ellipsis text-xl text-start font-bold h-6">@bill.Product.name</p>
+                                        <p class="hidden md:block overflow-hidden overflow-ellipsis text-justify h-14 pt-2 cart__item-information">@bill.Product.information</p>
+                                    </div>
+                                </td>
+                                <td class="w-[15%] px-3 py-1">
+                                    <div class="flex gap-2">
+                                        <p class="text-xs overflow-hidden overflow-ellipsis">@bill.Product.price.ToString("N0", CultureInfo.CreateSpecificCulture("de-DE")).Replace(",", ".")đ</p>
+                                        <p class="text-xs overflow-hidden overflow-ellipsis">x</p>
+                                        <p class="text-xs overflow-hidden overflow-ellipsis">@bill.Bill.quantity</p>
+                                    </div>
+                                    @{
+                                        var total = bill.Product.price * bill.Bill.quantity;
+                                        <p class="text-xl text-[#FF6827] font-semibold">@total.ToString("N0", CultureInfo.CreateSpecificCulture("de-DE")).Replace(",", ".")đ</p>
+                                    }
+                                </td>
+                                <td class="w-[15%] px-3 py-1">
+                                    <p class="overflow-hidden overflow-ellipsis">@bill.Bill.ship_date.ToString("dd-MM-yyyy")</p>
+                                </td>
+                                <td class="w-[15%] px-3 py-1">
+                                    @if (@bill.Bill.payments == 0)
+                                    {
+                                        <p class="overflow-hidden overflow-ellipsis">Khi nhận hàng</p>
+                                    }
+                                    else if (@bill.Bill.payments == 1)
+                                    {
+                                        <p class="overflow-hidden overflow-ellipsis">Ví LIGHTEX</p>
+
+                                    }
+                                </td>
+                                <td class="w-[15%] px-3 py-1">
+                                    @if (@bill.Bill.status == 0)
+                                    {
+                                        <p class="overflow-hidden overflow-ellipsis">Chờ xác nhận</p>
+                                    }
+                                    else @if (@bill.Bill.status == 1)
+                                    {
+                                        <p class="overflow-hidden overflow-ellipsis">Đang giao</p>
+                                    }
+                                    else @if (@bill.Bill.status == 2)
+                                    {
+                                        <p class="overflow-hidden overflow-ellipsis">Hoàn thành</p>
+                                    }
+                                    else @if (@bill.Bill.status == 3)
+                                    {
+                                        <p class="overflow-hidden overflow-ellipsis">Hủy</p>
+                                    }
+                                    else @if (@bill.Bill.status == 4)
+                                    {
+                                        <p class="overflow-hidden overflow-ellipsis">Trả hàng/ Hoàn tiền</p>
+                                    }
+                                </td>
+
+                                <td class="w-[10%] px-3 py-1">
+                                    @if (@bill.Bill.status == 0)
+                                    {
+                                        <a class="hover:cursor-pointer cancel-bill" data-id-bill="@bill.Bill.id_bill">
+                                            <p class="text-start hover:text-[#FF6827]">Hủy</p>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-start">Không thể hủy</p>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $('.bill-list').on('click', '.cancel-bill', function () {
+            var id_bill = $(this).data('id-bill');
+            $.ajax({
+                url: '/Home/CancelBill',
+                type: 'POST',
+                data: { id_bill: id_bill },
+                success: function () {
+                    location.reload(true);
+                },
+                error: function () {
+                    alert('Error cancel bill');
+                }
+            });
+        });
+    </script>
+</body>

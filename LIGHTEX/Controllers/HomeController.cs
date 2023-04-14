@@ -48,6 +48,14 @@ namespace LIGHTEX.Controllers
         {
             return View();
         }
+        public IActionResult Order()
+        {
+            return View();
+        }
+        public IActionResult Thanks()
+        {
+            return View();
+        }
         public IActionResult GetCartCount(int id)
         {
             var cartCount = _context.Cart.Where(c => c.id_customer == id).Count();
@@ -79,6 +87,115 @@ namespace LIGHTEX.Controllers
 
             return Ok();
         }
+        [HttpPost]
+        public async Task<IActionResult> CancelBill(int id_bill)
+        {
+            var bill = await _context.Bill.FindAsync(id_bill);
+            var product = await _context.Product.FirstOrDefaultAsync(c => c.id_product == bill.id_product);
+            var customer = await _context.Customer.FirstOrDefaultAsync(c => c.id_customer == bill.id_customer);
+            if (bill == null)
+            {
+                return NotFound();
+            }
+            bill.status = 3;
+            if (bill.payments == 1)
+            {
+                customer.money = customer.money + (bill.quantity * product.price);
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CheckoutAsync(int[] selectedCarts, int[] quantities, int payments, int id_customer)
+        {
+            var customer = await _context.Customer.FirstOrDefaultAsync(c => c.id_customer == id_customer);
+            var totalBill = 0;
+
+            if (selectedCarts.Length > 0)
+            {
+                if (payments == 0)
+                {
+                    for (int i = 0; i < selectedCarts.Length; i++)
+                    {
+                        int cartId = selectedCarts[i];
+                        var cart = _context.Cart.FirstOrDefault(c => c.id_cart == cartId);
+                        var product = _context.Product.FirstOrDefault(c => c.id_product == cart.id_product);
+                        if (cart == null)
+                        {
+                            continue;
+                        }
+                        totalBill = (int)(totalBill + product.price * quantities[i]);
+                        var bill = new Bill
+                        {
+                            id_customer = cart.id_customer,
+                            id_product = cart.id_product,
+                            quantity = quantities[i],
+                            payments = payments,
+                            status = 0,
+                            ship_date = DateTime.Now.AddDays(3),
+                            create_date = DateTime.Now
+                        };
+                        _context.Bill.Add(bill);
+                        _context.Cart.Remove(cart);
+                    }
+                    _context.SaveChanges();
+                    return RedirectToAction("Thanks", "Home");
+                }
+                else if (payments == 1)
+                {
+                    for (int i = 0; i < selectedCarts.Length; i++)
+                    {
+                        int cartId = selectedCarts[i];
+                        var cart = _context.Cart.FirstOrDefault(c => c.id_cart == cartId);
+                        var product = _context.Product.FirstOrDefault(c => c.id_product == cart.id_product);
+                        if (cart == null)
+                        {
+                            continue;
+                        }
+                        totalBill = (int)(totalBill + product.price * quantities[i]);
+                    }
+                    if (customer.money >= (double)totalBill)
+                    {
+                        for (int i = 0; i < selectedCarts.Length; i++)
+                        {
+                            int cartId = selectedCarts[i];
+                            var cart = _context.Cart.FirstOrDefault(c => c.id_cart == cartId);
+                            var product = _context.Product.FirstOrDefault(c => c.id_product == cart.id_product);
+                            if (cart == null)
+                            {
+                                continue;
+                            }
+                            var bill = new Bill
+                            {
+                                id_customer = cart.id_customer,
+                                id_product = cart.id_product,
+                                quantity = quantities[i],
+                                payments = payments,
+                                status = 0,
+                                ship_date = DateTime.Now.AddDays(3),
+                                create_date = DateTime.Now
+                            };
+                            _context.Bill.Add(bill);
+                            _context.Cart.Remove(cart);
+                        }
+                        customer.money = customer.money - (double)totalBill;
+                        _context.SaveChanges();
+                        return RedirectToAction("Thanks", "Home");
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "Số dư của quý khách không đủ.";
+                        return View("Cart");
+                    }
+                }
+                else
+                {
+                    return View("Cart");
+                }
+            }
+            return View("Cart");
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> UpdateCustomer(CustomerViewModel update, IFormFile image)
@@ -118,7 +235,7 @@ namespace LIGHTEX.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel change)
-        {            
+        {
             if (string.IsNullOrWhiteSpace(change.newpassword))
             {
                 ViewBag.ErrorMessage = "Mật khẩu mới không được để trống.";

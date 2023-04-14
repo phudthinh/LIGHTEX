@@ -84,40 +84,19 @@ CREATE TABLE CART
 );
 GO
 
-CREATE TABLE CART_DETAIL
-(
-    id_cart_detail INT IDENTITY NOT NULL,
-    id_cart INT NOT NULL,
-    id_product INT NOT NULL,
-    quantity INT NOT NULL,
-    CONSTRAINT PK_CART_DETAIL_id_cart_detail PRIMARY KEY (id_cart_detail),
-    FOREIGN KEY (id_cart) REFERENCES CART(id_cart),
-    FOREIGN KEY (id_product) REFERENCES PRODUCT(id_product)
-);
-GO
-
-CREATE TABLE BILL_DETAIL
-(
-    id_bill_detail INT IDENTITY NOT NULL,
-	id_customer INT NOT NULL,
-    id_product INT NOT NULL,
-    quantity INT NOT NULL,
-    CONSTRAINT PK_BILL_DETAIL_id_bill_detail PRIMARY KEY (id_bill_detail),
-    FOREIGN KEY (id_customer) REFERENCES CUSTOMER(id_customer),
-    FOREIGN KEY (id_product) REFERENCES PRODUCT(id_product)
-);
-GO
-
 CREATE TABLE BILL
 (
     id_bill INT IDENTITY NOT NULL,
-    id_bill_detail INT NOT NULL,
-    total FLOAT DEFAULT 0 NOT NULL,
-    status INT NOT NULL,
+	id_customer INT NOT NULL,
+    id_product INT NOT NULL,
+    quantity INT NOT NULL,
+	status INT NOT NULL,
+	payments INT NOT NULL,
     create_date DATETIME NOT NULL,
     ship_date DATETIME NOT NULL,
     CONSTRAINT PK_BILL_id_bill PRIMARY KEY (id_bill),
-    FOREIGN KEY (id_bill_detail) REFERENCES BILL_DETAIL(id_bill_detail)
+	FOREIGN KEY (id_customer) REFERENCES CUSTOMER(id_customer),
+    FOREIGN KEY (id_product) REFERENCES PRODUCT(id_product)
 );
 GO
 

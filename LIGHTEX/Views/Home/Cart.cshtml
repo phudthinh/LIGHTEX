@@ -1,6 +1,6 @@
 ﻿@model LIGHTEX.Models.CustomerViewModel;
 @{
-    ViewData["Title"] = "Nạp tiền";
+    ViewData["Title"] = "Giỏ hàng";
     Layout = "_Layout";
 }
 @using Microsoft.AspNetCore.Authentication.Cookies
@@ -41,66 +41,101 @@
 <body>
     <div class="container mx-auto px-4 flex flex-col justify-center w-full h-full py-10">
         <h1 class="text-2xl lg:text-4xl text-black font-bold mb-4 text-center">Giỏ hàng</h1>
-        <button>Thanh toán</button>
-        <div class="rounded-lg overflow-hidden">
-            <table >
-                <thead>
-                    <tr >
-                        <td><input type="checkbox" class="h-5 w-5"></td>
-                        <th>Sản phẩm</th>
-                        <th>Đơn giá</th>
-                        <th>Số lượng</th>
-                        <th>Số tiền</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var cart in carts)
-                    {
-                        <tr>
-                            <td><input type="checkbox" class="h-5 w-5"></td>
-                            <td>
-                                <img src="data:image/png;base64,@(Convert.ToBase64String(cart.Product.image))" alt="image" />
-                                <div>
-                                    <p>@cart.Product.name</p>
-                                    <p>@cart.Product.information</p>
-                                </div>
-                            </td>
-                            <td><p>@cart.Product.price.ToString("N0", CultureInfo.CreateSpecificCulture("de-DE")).Replace(",", ".")đ</p></td>
-                            <td>
-                                <div>
-                                    <div id="minusButton">-</div>
-                                    <p id="numberItem">@cart.Cart.quantity</p>
-                                    <div id="plusButton">+</div>
-                                </div>
-                            </td>
-                            <td><p>@cart.Product.price.ToString("N0", CultureInfo.CreateSpecificCulture("de-DE")).Replace(",", ".")đ</p></td>
-                            <td>
-                                <div data-cart-id="@cart.Cart.id_cart">
-                                </div>
-                            </td>
+        <form method="post" action="@Url.Action("Checkout", "Home")">
+            <input type="hidden" name="id_customer" value="@customer.id_customer" />
+            <div class="rounded-lg overflow-hidden">
+                <table class="w-full">
+                    <thead>
+                        <tr class="h-14 w-full bg-[#6D7CD3] text-[#FFFFFF]">
+                            <td class="w-[10%] px-3 py-1"><div class="w-full flex justify-center items-center"><input type="checkbox" class="h-5 w-5" id="check-all"></div></td>
+                            <th class="w-[50%] px-3 py-1 text-center">Sản phẩm</th>
+                            <th class="w-[15%] px-3 py-1 text-start">Đơn giá</th>
+                            <th class="w-[15%] px-3 py-1 text-start">Số lượng</th>
+                            <th class="w-[10%]"></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        @foreach (var cart in carts)
+                        {
+                            <tr class="h-14 w-full last:rounded-b-lg @(count++ % 2 == 0 ? "bg-[#ececec]" : "bg-[#FFFFFF] border-y border-[#cccccc]")">
+                                <td class="w-[10%] px-3 py-1"><div class="w-full flex justify-center items-center"><input type="checkbox" class="check-item h-5 w-5" name="selectedCarts" value="@cart.Cart.id_cart"></div></td>
+                                <td class="w-full px-3 py-1 flex gap-2">
+                                    <img class="w-20 h-auto" src="data:image/png;base64,@(Convert.ToBase64String(cart.Product.image))" alt="image" />
+                                    <div class="flex flex-col h-20">
+                                        <p class="hidden md:block overflow-hidden overflow-ellipsis text-xl text-start font-bold h-6">@cart.Product.name</p>
+                                        <p class="hidden md:block overflow-hidden overflow-ellipsis text-justify h-14 pt-2 cart__item-information">@cart.Product.information</p>
+                                    </div>
+                                </td>
+                                <td class="w-[15%] px-3 py-1"><p class="overflow-hidden overflow-ellipsis">@cart.Product.price.ToString("N0", CultureInfo.CreateSpecificCulture("de-DE")).Replace(",", ".")đ</p></td>
+                                <td class="w-[15%] h-full px-3 py-1">
+                                    <div class="flex items-center justify-start gap-1 md:gap-3">
+                                        <div class="px-2 py-1 rounded-md text-center text-white bg-[#6D7CD3] hover:bg-[#4153AD] hover:cursor-pointer cannot__select minusButton">-</div>
+                                        <p class="numberItem">@cart.Cart.quantity</p>
+                                        <input type="hidden" name="quantities[]" class="numberItemValue" value="@cart.Cart.quantity" />
+                                        <div class="px-2 py-1 rounded-md text-center text-white bg-[#6D7CD3] hover:bg-[#4153AD] hover:cursor-pointer cannot__select plusButton">+</div>
+                                    </div>
+                                </td>
+                                <td class="w-[10%] px-3 py-1">
+                                    <div class="group w-4 h-4 md:hover:scale-125 hover:cursor-pointer md:hover:rotate-90 transition-all delete-cart" data-cart-id="@cart.Cart.id_cart">
+                                        <svg class="fill-[#333333] w-full h-full group-hover:fill-[#FF0000]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 63.71 63.71">
+                                            <path d="M266.2,392.63a2.16,2.16,0,0,1,3.06-3.06l28.17,28.17,28.18-28.17a2.16,2.16,0,0,1,3.06,3.06L300.5,420.81,328.67,449a2.16,2.16,0,0,1-3.06,3.06l-28.18-28.17L269.26,452A2.16,2.16,0,0,1,266.2,449l28.17-28.17Z" transform="translate(-265.58 -388.95)" />
+                                        </svg>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <p class="mt-4 text-[#FF0000]">@ViewBag.ErrorMessage</p>
+            }
+            <div class="w-full flex justify-between items-center mt-4">
+                <div class="w-[50%] flex flex-col justify-start items-start gap-2">
+                    <div class="flex gap-2">
+                        <input type="radio" id="A" name="payments" value="0" checked>
+                        <p for="A">Thanh toán khi nhận hàng</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="radio" id="B" name="payments" value="1">
+                        <p for="B">Thanh toán bằng ví LIGHTEX</p>
+                    </div>
+                </div>
+                <div class="w-[50%] flex justify-end items-center">
+                <button type="submit" class="px-6 py-2 rounded-md text-white bg-[#FF6827] hover:bg-[#FF6827]/[.9] font-medium">Thanh toán</button>
+                </div>
+            </div>
+        </form>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            var numberItem = $("#numberItem");
-            var currentNumber = parseInt(numberItem.text());
-            $("#minusButton").on("click", function () {
-                if (currentNumber > 1) {
-                    currentNumber--;
-                    numberItem.text(currentNumber);
-                }
-            });
-            $("#plusButton").on("click", function () {
-                currentNumber++;
-                numberItem.text(currentNumber);
-            });
+        const minusButtons = document.querySelectorAll('.minusButton');
+        const plusButtons = document.querySelectorAll('.plusButton');
+
+        minusButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const numberItem = button.nextElementSibling;
+            const numberItemValue = numberItem.nextElementSibling;
+            let value = parseInt(numberItem.textContent);
+            if (value > 1) {
+              value--;
+              numberItem.textContent = value;
+              numberItemValue.value = value;
+            }
+          });
+        });
+
+        plusButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const numberItem = button.previousElementSibling.previousElementSibling;
+            const numberItemValue = button.previousElementSibling;
+            let value = parseInt(numberItem.textContent);
+            value++;
+            numberItem.textContent = value;
+            numberItemValue.value = value;
+          });
         });
 
         $(document).ready(function () {
@@ -118,6 +153,15 @@
                     }
                 });
             });
+        });
+
+        const checkAll = document.querySelector('#check-all');
+        const checkboxes = document.querySelectorAll('.check-item');
+
+        checkAll.addEventListener('click', function () {
+            for (let i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = checkAll.checked;
+            }
         });
     </script>
 
