@@ -88,6 +88,7 @@ namespace LIGHTEX.Controllers
                     id_brand = create.id_brand,
                     information = string.IsNullOrWhiteSpace(create.information) ? "" : create.information,
                     price = create.price,
+                    effect = create.effect,
                     status = true,
                     modified_date = DateTime.Now,
                     create_date= DateTime.Now,
@@ -149,6 +150,7 @@ namespace LIGHTEX.Controllers
                 existingProduct.id_brand = update.id_brand;
                 existingProduct.price = update.price;
                 existingProduct.status = update.status;
+                existingProduct.effect = update.effect;
                 existingProduct.modified_date = DateTime.Now;
 
                 if (image != null)

@@ -11,6 +11,7 @@ namespace LIGHTEX.Models
         public string name { get; set; }
         public string information { get; set; }
         public double price { get; set; }
+        public int effect { get; set; }
         public byte[] image { get; set; }
         public bool status { get; set; }
         public DateTime create_date { get; set; }

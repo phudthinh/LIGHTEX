@@ -11,8 +11,7 @@
     ViewBag.Title = "Chỉnh sửa sản phẩm";
     Layout = "_LayoutAdmin";
     var context = HttpContextAccessor?.HttpContext?.RequestServices.GetService(typeof(LIGHTEXContext)) as LIGHTEXContext;
-    var products = await context.Product.FirstOrDefaultAsync(p => p.id_product == @Model.id_product);
-    var product1 = await context.Product.FirstOrDefaultAsync(p => p.id_product == @Model.id_product);
+    var product = await context.Product.FirstOrDefaultAsync(p => p.id_product == @Model.id_product);
 
     var categories = await context.Category.ToListAsync();
     var brands = await context.Brand.ToListAsync();
@@ -26,11 +25,11 @@
             </svg>
         </a>
         <div class="relative group flex justify-center items-center w-36 h-36 lg:hover:scale-125 transition-all hidden" id="image-preview-container">
-            <img class="w-24 h-24 transition-all z-20 object-cover" id="image-preview" alt="Icon" src="data:image/png;base64,@(Convert.ToBase64String(product1.image))" />
+            <img class="w-24 h-24 transition-all z-20 object-cover" id="image-preview" alt="Icon" src="data:image/png;base64,@(Convert.ToBase64String(product.image))" />
         </div>
 
         <div class="relative group flex justify-center items-center w-36 h-36 lg:hover:scale-125 transition-all block" id="image-default-container">
-            <img class="w-24 h-24 transition-all z-20 object-cover" src="data:image/png;base64,@(Convert.ToBase64String(product1.image))" alt="Avatar" />
+            <img class="w-24 h-24 transition-all z-20 object-cover" src="data:image/png;base64,@(Convert.ToBase64String(product.image))" alt="Avatar" />
         </div>
 
         <form method="post" action="@Url.Action("UpdateProduct", "ProductManagement")" enctype="multipart/form-data">
@@ -82,6 +81,16 @@
                         <svg class="absolute top-[40%] right-5 fill-[#333333] lg:group-hover:fill-[#FF6827] lg:group-hover:scale-125 lg:group-hover:cursor-pointer w-5 h-auto transition-all z-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58.63 31.47">
                             <path d="M268.73,408.74a2.16,2.16,0,0,1,3.06-3.06l25.66,25.66,25.62-25.66a2.16,2.16,0,0,1,3.06,3.06L299,435.9a2.12,2.12,0,0,1-3,0Z" transform="translate(-268.12 -405.07)" />
                         </svg>
+                    </div>
+                    <div class="mt-3 w-full group flex justify-between items-center">
+                        <div class="flex gap-2">
+                            <input type="radio" id="topDown" name="effect" value="0" @if(product.effect == 0){<text>checked</text>}>
+                            <p for="topDown">Top Down</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="radio" id="zoom" name="effect" value="1" @if(product.effect == 1){<text>checked</text>}>
+                            <p for="zoom">Zoom</p>
+                        </div>
                     </div>
                     <div class="mt-3 w-full flex justify-start items-center group gap-2 hover:cursor-pointer">
                         <input type="checkbox" asp-for="status" class="h-5 w-5" id="activeCheckbox">

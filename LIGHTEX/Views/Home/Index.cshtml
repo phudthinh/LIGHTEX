@@ -60,8 +60,8 @@
         .ToListAsync();
 }
 <body>
-    <div id="product-image-container" class="absolute top-[-800px] left-[55%] translate-y-[600px] duration-1000 transition-all">
-        <img id="product-image" class="w-auto h-[600px]" src="data:image/png;base64,@(Convert.ToBase64String(products.FirstOrDefault().Product.image))" />
+    <div id="product-image-container" class="absolute left-[55%] duration-1000 transition-all">
+        <img id="product-image" class="w-[400px] h-[600px] object-cover" src="data:image/png;base64,@(Convert.ToBase64String(products.FirstOrDefault().Product.image))" />
     </div>
 
     <div class="container mx-auto flex justify-between h-[80vh] mt-10">
@@ -90,6 +90,7 @@
                 <div class="px-20 py-12 h-full flex relative">
                     <div class="w-[50%]">
                         <p class="hidden" id="product-id">@products.FirstOrDefault().Product.id_product</p>
+                        <p class="hidden" id="product-effect">@products.FirstOrDefault().Product.effect</p>
                         <h1 class="text-6xl font-bold text-start text-[#FFFFFF]" id="product-name">@products.FirstOrDefault().Product.name</h1>
                         <h3 class="text-5xl font-normal text-start text-[#FFFFFF] mt-4" id="product-price">@products.FirstOrDefault().Product.price.ToString("N0", CultureInfo.CreateSpecificCulture("de-DE")).Replace(",", ".")đ</h3>
                         <div class="mt-14 flex flex-col gap-4">
@@ -217,6 +218,7 @@
                                 <price class="hidden">@product.Product.price</price>
                                 <information class="hidden">@product.Product.information</information>
                                 <about-brand class="hidden">@product.Brand.description</about-brand>
+                                <effect class="hidden">@product.Product.effect</effect>
                                 @{
                                     allComments.Clear();
                                     commentList = (await context.Comment
@@ -250,6 +252,13 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
+        var _productEffect = '@products.FirstOrDefault().Product.effect';
+        if (_productEffect == '0') {
+            $('#product-image-container').addClass('top-[-800px] translate-y-[600px]');
+        }
+        if (_productEffect == '1') {
+            $('#product-image-container').addClass('scale-100');
+        }
         var mySwiperNav = new Swiper('.swiper-nav .swiper-container', {
             direction: 'vertical',
             slidesPerView: 5,
@@ -274,7 +283,6 @@
                 var idCategory = $(this).data('id');
                 var productsSearch = @Html.Raw(Json.Serialize(productsSearch));
                 var comments = @Html.Raw(Json.Serialize(commentListSearch));
-                console.log(comments)
                 var filteredProducts = productsSearch.filter(function (product) {
                     return product.product.id_category === idCategory;
                 });
@@ -293,6 +301,7 @@
                     productHTML += '<price class="hidden">' + product.product.price + '</price>';
                     productHTML += '<information class="hidden">' + product.product.information + '</information>';
                     productHTML += '<about-brand class="hidden">' + product.brand.description + '</about-brand>';
+                    productHTML += '<effect class="hidden">' + product.product.effect + '</effect>';
                     productHTML += '<div class="product-comment hidden">' + JSON.stringify(commentsFiltered) + '</div>';
                     productHTML += '<img class="absolute top-[-60px] w-full h-80 opacity-0 lg:group-hover:opacity-50 transition-all z-0" src="/assets/bg-chooseLight.png" />';
                     productHTML += '</div></div>';
@@ -364,13 +373,71 @@
 
             var productImageSrc = $(this).find('img').attr('src');
 
-            $('#product-image-container').removeClass('translate-y-[600px]').addClass('translate-y-[-600px]');
-            setTimeout(function () {
+            var productEffect = $(this).find('effect').text();
+            $('#product-effect').text(productEffect);
+            if (_productEffect == '0') {
+                $('#product-image-container').removeClass('translate-y-[600px]').addClass('translate-y-[-600px]');
+                console.log(_productEffect)
+                _productEffect = productEffect
+                console.log(_productEffect)
+                if(_productEffect == '0')
+                {
+                    setTimeout(function () {
+                        $('#product-image-container').addClass('top-[-800px]');
+                        $('#product-image').attr('src', productImageSrc);
+                        $('#product-image-container').removeClass('translate-y-[-600px]').addClass('translate-y-[600px]');
+                    }, 500);
+                }
+                if(_productEffect == '1')
+                {
+                    setTimeout(function () {
+                        $('#product-image-container').addClass('scale-0')
+                        $('#product-image-container').removeClass('top-[-800px]');
+                        $('#product-image-container').removeClass('translate-y-[600px]');
+                        $('#product-image-container').removeClass('translate-y-[-600px]');
+                        }, 1000);
+                    setTimeout(function () {
+                        $('#product-image-container').removeClass('top-[-800px]');
+                        $('#product-image-container').removeClass('translate-y-[600px]');
+                        $('#product-image-container').removeClass('translate-y-[-600px]');
+                        $('#product-image-container').removeClass('scale-0');
+                        $('#product-image').attr('src', productImageSrc);
+                        $('#product-image-container').removeClass('scale-0').addClass('scale-100');
+                    }, 2000);
+                }
 
-                $('#product-image').attr('src', productImageSrc);
-                $('#product-image-container').removeClass('translate-y-[-600px]').addClass('translate-y-[600px]');
-            }, 500);
-
+            }
+            if (_productEffect == '1') {
+                $('#product-image-container').removeClass('scale-100').addClass('scale-0');
+                console.log(_productEffect)
+                _productEffect = productEffect
+                console.log(_productEffect)
+                
+                if(_productEffect == '0')
+                {
+                    setTimeout(function () {
+                        $('#product-image-container').removeClass('scale-0').addClass('scale-100');
+                        $('#product-image').attr('src', productImageSrc);
+                        $('#product-image-container').addClass('top-[-800px]');
+                        $('#product-image-container').removeClass('translate-y-[-600px]');
+                        }, 1000);
+                    setTimeout(function () {
+                        $('#product-image-container').addClass('translate-y-[600px]');
+                        }, 1500);
+                }
+                if(_productEffect == '1')
+                {
+                    setTimeout(function () {
+                        $('#product-image-container').removeClass('top-[-800px]');
+                        $('#product-image-container').removeClass('translate-y-[600px]');
+                        $('#product-image-container').removeClass('translate-y-[-600px]');
+                        }, 1000);
+                    setTimeout(function () {
+                        $('#product-image').attr('src', productImageSrc);
+                        $('#product-image-container').removeClass('scale-0').addClass('scale-100');
+                    }, 1500);
+                }
+            }
             var customerId = $('#favorite').data('customer');
             var favoriteSpan = $('#favorite');
 
