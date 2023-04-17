@@ -186,6 +186,25 @@ input:-webkit-autofill:focus {
 .input__search:focus ~ .history {
     display: block;
 }
+.star-rating {
+    display: flex;
+}
+
+.star-rating input[type="radio"] {
+    display: none;
+}
+
+.star-rating label {
+    color: #ddd;
+    font-size: 2em;
+    padding: 0;
+    cursor: pointer;
+}
+
+.star-rating input[type="radio"]:checked ~ label {
+    color: #ffc107;
+}
+
 .cart:hover .show__cart{
     display: block;
 }

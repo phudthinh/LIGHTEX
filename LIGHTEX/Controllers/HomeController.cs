@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System;
 using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Security.Claims;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -55,6 +56,74 @@ namespace LIGHTEX.Controllers
         public IActionResult Thanks()
         {
             return View();
+        }
+        public IActionResult Comment(int id_bill)
+        {
+            var _bill = _context.Bill.FirstOrDefault(b => b.id_bill == id_bill);
+            var _customer = _context.Customer.FirstOrDefault(c => c.id_customer == _bill.id_customer);
+            var _account = _context.Account.FirstOrDefault(c => c.username == _customer.username);
+            var _product = _context.Product.FirstOrDefault(p => p.id_product == _bill.id_product);
+            var _category = _context.Category.FirstOrDefault(c => c.id_category == _product.id_category);
+            var _brand = _context.Brand.FirstOrDefault(b => b.id_brand == _product.id_brand);
+            if (_bill == null)
+            {
+                return NotFound();
+            }
+            var comment = new CommentViewModel()
+            {
+                id_bill= id_bill,
+                product = _product.name,
+                category = _category.name,
+                brand = _brand.name,
+                image = _product.image,
+            };
+
+            return View(comment);
+        }
+        public async Task<IActionResult> CommentSend(CommentViewModel send)
+        {
+            var _bill = await _context.Bill.FirstOrDefaultAsync(c => c.id_bill == send.id_bill);
+            var _customer = _context.Customer.FirstOrDefault(c => c.id_customer == _bill.id_customer);
+            var _account = _context.Account.FirstOrDefault(c => c.username == _customer.username);
+            var _product = _context.Product.FirstOrDefault(p => p.id_product == _bill.id_product);
+            var _category = _context.Category.FirstOrDefault(c => c.id_category == _product.id_category);
+            var _brand = _context.Brand.FirstOrDefault(b => b.id_brand == _product.id_brand);
+            var _comment = new CommentViewModel()
+            {
+                id_bill = send.id_bill,
+                product = _product.name,
+                category = _category.name,
+                brand = _brand.name,
+                image = _product.image,
+            };
+            if (_bill == null)
+            {
+                return NotFound();
+            }
+            else if (send.star == 0)
+            {
+                ViewBag.ErrorMessage = "Vui lòng chọn số sao để đánh giá.";
+                return View("Comment", _comment);
+            }
+            else if (string.IsNullOrWhiteSpace(send.content))
+            {
+                ViewBag.ErrorMessage = "Vui lòng nhập nội dung đánh giá.";
+                return View("Comment", _comment);
+            }
+            else
+            {
+                var comment = new Comment()
+                {
+                    id_customer = _bill.id_customer,
+                    id_product = _bill.id_product,
+                    content = send.content,
+                    star = send.star
+                };
+                _context.Comment.AddAsync(comment);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Home");
+            }
         }
         public IActionResult GetCartCount(int id)
         {
@@ -236,7 +305,12 @@ namespace LIGHTEX.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel change)
         {
-            if (string.IsNullOrWhiteSpace(change.newpassword))
+            if (string.IsNullOrWhiteSpace(change.oldpassword))
+            {
+                ViewBag.ErrorMessage = "Mật khẩu hiện tại không được để trống.";
+                return View("ChangePassword");
+            }
+            else if (string.IsNullOrWhiteSpace(change.newpassword))
             {
                 ViewBag.ErrorMessage = "Mật khẩu mới không được để trống.";
                 return View("ChangePassword");

@@ -88,13 +88,13 @@
                                 <input type="text" placeholder="Số điện thoại" asp-for="phone" value="@customer.phone"
                                        class=" bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-full">
                             </div>
-                            <div class="mt-3 w-full flex justify-between items-center">
+                            <div class="mt-3 w-full flex flex-col md:flex-row justify-between items-center">
                                 <input type="text" placeholder="Địa chỉ" asp-for="address" value="@customer.address"
-                                       class="bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-[30%]">
+                                       class="bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-full md:w-[30%]">
                                 <input type="text" placeholder="Phường" asp-for="ward" value="@customer.ward"
-                                       class="bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-[30%]">
+                                       class="bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-full md:w-[30%] mt-3 md:mt-0">
                                 <input type="text" placeholder="Thành phố" asp-for="city" value="@customer.city"
-                                       class="bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-[30%]">
+                                       class="bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-full md:w-[30%] mt-3 md:mt-0">
                             </div>
                             <div class="mt-3 w-full flex gap-2 justify-start">
                                 <p class="text-base text-black font-bold my-2 text-start">Số dư tài khoản: </p>
@@ -106,7 +106,7 @@
                             }
                         </div>
                         <div class="text-center mt-7">
-                            <button type="submit" class="uppercase px-24 md:px-[118px] lg:px-[140px] py-2 rounded-md text-white bg-[#FF6827] hover:bg-[#FF6827]/[.9] font-medium">
+                            <button type="submit" class="uppercase px-10 md:px-[118px] lg:px-[140px] py-2 rounded-md text-white bg-[#FF6827] hover:bg-[#FF6827]/[.9] font-medium">
                                 Cập nhật
                             </button>
                         </div>
