@@ -47,8 +47,9 @@ GO
 CREATE TABLE BRAND
 (
     id_brand INT IDENTITY NOT NULL,
+	
+    name NVARCHAR(50) NOT NULL,
 	description NVARCHAR(500) NOT NULL,
-    name NVARCHAR(50) NOT NULL
 	CONSTRAINT PK_BRAND_id_brand PRIMARY KEY (id_brand),
 );
 GO
