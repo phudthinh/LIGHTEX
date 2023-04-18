@@ -23,7 +23,7 @@
     var customer = await context.Customer.FirstOrDefaultAsync(c => c.username == username);
     var products = await context.Product
                     .Join(context.Brand, p => p.id_brand, b => b.id_brand, (p, b) => new { Product = p, Brand = b })
-                    .Where(pb => pb.Product.id_category == categoryFirst.id_category)
+                    .Where(pb => pb.Product.id_category == categoryFirst.id_category && pb.Product.status == true)
                     .ToListAsync();
     var commentList = await context.Comment
     .Join(context.Customer, c => c.id_customer, cu => cu.id_customer, (c, cu) => new { Comment = c, Customer = cu })
@@ -46,6 +46,7 @@
 
     var productsSearch = await context.Product
                     .Join(context.Brand, p => p.id_brand, b => b.id_brand, (p, b) => new { Product = p, Brand = b })
+                    .Where(p => p.Product.status == true)
                     .ToListAsync();
     var commentListSearch = await context.Comment
         .Join(context.Customer, c => c.id_customer, cu => cu.id_customer, (c, cu) => new { Comment = c, Customer = cu })
@@ -257,7 +258,7 @@
     <script>
         var _productEffect = '@products.FirstOrDefault().Product.effect';
         if (_productEffect == '0') {
-            $('#product-image-container').addClass('top-[-800px] translate-y-[600px]');
+            $('#product-image-container').addClass('top-[-700px] translate-y-[600px]');
         }
         if (_productEffect == '1') {
             $('#product-image-container').addClass('scale-100');
@@ -391,7 +392,7 @@
                 if(_productEffect == '0')
                 {
                     setTimeout(function () {
-                        $('#product-image-container').addClass('top-[-800px]');
+                        $('#product-image-container').addClass('top-[-700px]');
                         $('#product-image').attr('src', productImageSrc);
                         $('#product-image-container').removeClass('translate-y-[-600px]').addClass('translate-y-[600px]');
                     }, 500);
@@ -400,12 +401,12 @@
                 {
                     setTimeout(function () {
                         $('#product-image-container').addClass('scale-0')
-                        $('#product-image-container').removeClass('top-[-800px]');
+                        $('#product-image-container').removeClass('top-[-700px]');
                         $('#product-image-container').removeClass('translate-y-[600px]');
                         $('#product-image-container').removeClass('translate-y-[-600px]');
                         }, 1000);
                     setTimeout(function () {
-                        $('#product-image-container').removeClass('top-[-800px]');
+                        $('#product-image-container').removeClass('top-[-700px]');
                         $('#product-image-container').removeClass('translate-y-[600px]');
                         $('#product-image-container').removeClass('translate-y-[-600px]');
                         $('#product-image-container').removeClass('scale-0');
@@ -426,7 +427,7 @@
                     setTimeout(function () {
                         $('#product-image-container').removeClass('scale-0').addClass('scale-100');
                         $('#product-image').attr('src', productImageSrc);
-                        $('#product-image-container').addClass('top-[-800px]');
+                        $('#product-image-container').addClass('top-[-700px]');
                         $('#product-image-container').removeClass('translate-y-[-600px]');
                         }, 1000);
                     setTimeout(function () {
@@ -436,7 +437,7 @@
                 if(_productEffect == '1')
                 {
                     setTimeout(function () {
-                        $('#product-image-container').removeClass('top-[-800px]');
+                        $('#product-image-container').removeClass('top-[-700px]');
                         $('#product-image-container').removeClass('translate-y-[600px]');
                         $('#product-image-container').removeClass('translate-y-[-600px]');
                         }, 1000);
