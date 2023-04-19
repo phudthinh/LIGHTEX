@@ -5,12 +5,14 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
+using System.Security.Cryptography;
 using System;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Security.Claims;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Text;
 
 namespace LIGHTEX.Controllers
 {
@@ -271,10 +273,17 @@ namespace LIGHTEX.Controllers
         {
             var existingAccount = await _context.Account.FirstOrDefaultAsync(a => a.username == update.username);
             var existingCustomer = await _context.Customer.FirstOrDefaultAsync(a => a.username == update.username);
+            var existingEmail = await _context.Customer.FirstOrDefaultAsync(a => a.email == update.email && a.username != update.username && (update.email == null || a.email != null));
 
             if (string.IsNullOrWhiteSpace(update.full_name))
             {
                 ViewBag.ErrorMessage = "Tên người dùng không được để trống.";
+                return View("Information", update);
+            }
+
+            else if (existingEmail != null)
+            {
+                ViewBag.ErrorMessage = "Email này đã được sử dụng.";
                 return View("Information", update);
             }
             else
@@ -327,7 +336,14 @@ namespace LIGHTEX.Controllers
             }
             else
             {
-                var account = await _context.Account.FirstOrDefaultAsync(a => a.username == change.username && a.password == change.oldpassword);
+                var sha256 = SHA256.Create();
+                var oldpasswordHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(change.oldpassword));
+                var oldpasswordHashString = BitConverter.ToString(oldpasswordHash).Replace("-", "").ToLower();
+
+                var newpasswordHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(change.newpassword));
+                var newpasswordHashString = BitConverter.ToString(newpasswordHash).Replace("-", "").ToLower();
+
+                var account = await _context.Account.FirstOrDefaultAsync(a => a.username == change.username && a.password == oldpasswordHashString);
                 if (account == null)
                 {
                     ViewBag.ErrorMessage = "Mật khẩu hiện tại không đúng.";
@@ -335,7 +351,7 @@ namespace LIGHTEX.Controllers
                 }
                 else
                 {
-                    account.password = change.newpassword;
+                    account.password = newpasswordHashString;
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Index", "Home");
                 }

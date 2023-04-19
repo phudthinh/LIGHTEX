@@ -3,9 +3,12 @@ using LIGHTEX.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 using MailKit.Net.Smtp;
 using MimeKit;
 using System.Web;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Text;
 
 namespace LIGHTEX.Controllers
 {
@@ -57,7 +60,10 @@ namespace LIGHTEX.Controllers
                 }
                 else
                 {
-                    account.password = change.newpassword;
+                    var sha256 = SHA256.Create();
+                    var passwordHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(change.newpassword));
+                    var passwordHashString = BitConverter.ToString(passwordHash).Replace("-", "").ToLower();
+                    account.password = passwordHashString;
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Index", "Login");
                 }

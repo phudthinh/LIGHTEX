@@ -50,6 +50,7 @@ namespace LIGHTEX.Controllers
                 create_date = _bill.create_date,
                 ship_date = _bill.ship_date,
                 status = _bill.status,
+                payments= _bill.payments,
             };
             return View(orderDetail);
         }
@@ -57,13 +58,23 @@ namespace LIGHTEX.Controllers
         public async Task<IActionResult> UpdateDetail(OrderDetailViewModel update)
         {
             var deltailBill = await _context.Bill.FirstOrDefaultAsync(c => c.id_bill == update.id_bill);
+            var _bill = _context.Bill.FirstOrDefault(b => b.id_bill == update.id_bill);
+            var _customer = _context.Customer.FirstOrDefault(c => c.id_customer == _bill.id_customer);
+            var _account = _context.Account.FirstOrDefault(c => c.username == _customer.username);
+            var _product = _context.Product.FirstOrDefault(p => p.id_product == _bill.id_product);
+            var _category = _context.Category.FirstOrDefault(c => c.id_category == _product.id_category);
+            var _brand = _context.Brand.FirstOrDefault(b => b.id_brand == _product.id_brand);
 
             deltailBill.status = update.status;
             deltailBill.ship_date = update.ship_date;
-
-            _context.Bill.Update(deltailBill);
+            if (update.payments == 1 && update.status == 4)
+            {
+                _customer.money = _customer.money + (_bill.quantity * _product.price);
+                _context.Bill.Update(deltailBill);
+            }
             await _context.SaveChangesAsync();
-
+            _context.Customer.Update(_customer);
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index", "OrderManagement");
 
         }

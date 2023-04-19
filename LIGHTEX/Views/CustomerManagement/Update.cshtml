@@ -3,6 +3,7 @@
 @using LIGHTEX.Data
 @using Microsoft.AspNetCore.Http
 @using System.Diagnostics;
+@using System.Globalization;
 @using System.Linq;
 @using Microsoft.EntityFrameworkCore;
 @inject IHttpContextAccessor HttpContextAccessor
@@ -59,7 +60,7 @@
                                class=" bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-full">
                     </div>
                     <div class="mt-3 w-full">
-                        <input type="text" placeholder="Email" asp-for="email" value="@Model.email"
+                        <input type="email" placeholder="Email" asp-for="email" value="@Model.email"
                                class=" bg-gray-100 rounded-lg px-5 py-2 focus:border border-[#FF6827] focus:outline-none text-black placeholder:text-gray-600 placeholder:opacity-50 font-semibold w-full">
                     </div>
                     <div class="mt-3 w-full">
@@ -77,6 +78,10 @@
                     <div class="mt-3 w-full flex justify-start items-center group gap-2 hover:cursor-pointer">
                         <input type="checkbox" asp-for="active" class="h-5 w-5" id="activeCheckbox">
                         <p class="text-black group-hover:text-[#FF6827] font-semibold" onclick="toggleCheckbox(event)" id="statusText">Trạng thái</p>
+                    </div>
+                    <div class="mt-3 w-full flex gap-2 justify-start">
+                        <p class="text-base text-black font-bold my-2 text-start">Số dư tài khoản: </p>
+                        <p class="text-base text-gray-600 font-normal my-2 text-start">@Model.money.ToString("N0", CultureInfo.CreateSpecificCulture("de-DE")).Replace(",", ".")đ</p>
                     </div>
                     @if (ViewBag.ErrorMessage != null)
                     {

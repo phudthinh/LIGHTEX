@@ -3,10 +3,13 @@ using LIGHTEX.Models;
 using LIGHTEX.Models.Domain;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Text;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace LIGHTEX.Controllers
 {
@@ -28,16 +31,14 @@ namespace LIGHTEX.Controllers
         {
             return View();
         }
-        public IActionResult Update(string username)
+        public IActionResult Update(string username, string email)
         {
             var existingAccount =  _context.Account.FirstOrDefault(a => a.username == username);
             var existingCustomer = _context.Customer.FirstOrDefault(a => a.username == username);
-
             if (existingAccount == null || existingCustomer == null)
             {
                 return NotFound();
             }
-
             var customer = new CustomerViewModel()
             {
                 username = existingAccount.username,
@@ -49,6 +50,7 @@ namespace LIGHTEX.Controllers
                 address = existingCustomer.address,
                 ward = existingCustomer.ward,
                 city = existingCustomer.city,
+                money= existingCustomer.money,
             };
 
             return View(customer);
@@ -76,53 +78,64 @@ namespace LIGHTEX.Controllers
             {
                 var existingAccount = await _context.Account.FirstOrDefaultAsync(a => a.username == create.username);
                 var existingCustomer = await _context.Customer.FirstOrDefaultAsync(a => a.username == create.username);
+                var existingEmail = await _context.Customer.FirstOrDefaultAsync(a => a.email == create.email && a.username != create.username && (create.email == null || a.email != null));
 
                 if (existingAccount != null && existingCustomer != null)
                 {
                     ViewBag.ErrorMessage = "Tài khoản này đã được sử dụng.";
                     return View("Create");
                 }
-
-                var account = new Account()
+                else if (string.IsNullOrWhiteSpace(create.email) && existingEmail != null)
                 {
-                    username = create.username,
-                    password = create.password,
-                    full_name = create.full_name,
-                    active = true,
-                    permission = 0,
-                    create_date = DateTime.Now,
-                    last_login = DateTime.Now
-                };
-
-                var customer = new Customer()
-                {
-                    username = create.username,
-                    email = string.IsNullOrWhiteSpace(create.email) ? "" : create.email,
-                    phone = string.IsNullOrWhiteSpace(create.phone) ? "" : create.phone,
-                    address = string.IsNullOrWhiteSpace(create.address) ? "" : create.address,
-                    ward = string.IsNullOrWhiteSpace(create.ward) ? "" : create.ward,
-                    city = string.IsNullOrWhiteSpace(create.city) ? "" : create.city,
-                    money = 0
-                };
-
-                if (image == null)
-                {
-                    customer.avatar = new byte[0];
+                    ViewBag.ErrorMessage = "Email này đã được sử dụng.";
+                    return View("Create");
                 }
                 else
                 {
-                    using (var memoryStream = new MemoryStream())
+                    var sha256 = SHA256.Create();
+                    var passwordHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(create.password));
+                    var passwordHashString = BitConverter.ToString(passwordHash).Replace("-", "").ToLower();
+                    var account = new Account()
                     {
-                        await image.CopyToAsync(memoryStream);
-                        customer.avatar = memoryStream.ToArray();
-                    }
-                }
+                        username = create.username,
+                        password = passwordHashString,
+                        full_name = create.full_name,
+                        active = true,
+                        permission = 0,
+                        create_date = DateTime.Now,
+                        last_login = DateTime.Now
+                    };
 
-                await _context.Account.AddAsync(account);
-                await _context.SaveChangesAsync();
-                await _context.Customer.AddAsync(customer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "CustomerManagement");
+                    var customer = new Customer()
+                    {
+                        username = create.username,
+                        email = string.IsNullOrWhiteSpace(create.email) ? "" : create.email,
+                        phone = string.IsNullOrWhiteSpace(create.phone) ? "" : create.phone,
+                        address = string.IsNullOrWhiteSpace(create.address) ? "" : create.address,
+                        ward = string.IsNullOrWhiteSpace(create.ward) ? "" : create.ward,
+                        city = string.IsNullOrWhiteSpace(create.city) ? "" : create.city,
+                        money = 0
+                    };
+
+                    if (image == null)
+                    {
+                        customer.avatar = new byte[0];
+                    }
+                    else
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await image.CopyToAsync(memoryStream);
+                            customer.avatar = memoryStream.ToArray();
+                        }
+                    }
+
+                    await _context.Account.AddAsync(account);
+                    await _context.SaveChangesAsync();
+                    await _context.Customer.AddAsync(customer);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "CustomerManagement");
+                }
             }
         }
         [HttpPost]
@@ -130,6 +143,7 @@ namespace LIGHTEX.Controllers
         {
             var existingAccount = await _context.Account.FirstOrDefaultAsync(a => a.username == update.username);
             var existingCustomer = await _context.Customer.FirstOrDefaultAsync(a => a.username == update.username);
+            var existingEmail = await _context.Customer.FirstOrDefaultAsync(a => a.email == update.email && a.username != update.username && (update.email == null || a.email != null));
 
             if (string.IsNullOrWhiteSpace(update.password))
             {
@@ -141,9 +155,18 @@ namespace LIGHTEX.Controllers
                 ViewBag.ErrorMessage = "Tên người dùng không được để trống.";
                 return View("Update", update);
             }
+            else if (string.IsNullOrWhiteSpace(update.email) && existingEmail != null)
+            {
+                ViewBag.ErrorMessage = "Email này đã được sử dụng.";
+                return View("Update", update);
+            }
             else
             {
-                existingAccount.password = update.password;
+                var sha256 = SHA256.Create();
+                var passwordHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(update.password));
+                var passwordHashString = BitConverter.ToString(passwordHash).Replace("-", "").ToLower();
+
+                existingAccount.password = passwordHashString;
                 existingAccount.full_name = update.full_name;
                 existingAccount.active = update.active;
                 existingCustomer.email = string.IsNullOrWhiteSpace(update.email) ? "" : update.email;

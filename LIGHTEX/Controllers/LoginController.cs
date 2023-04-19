@@ -11,9 +11,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using LIGHTEX.Models.Domain;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Cryptography;
 using Microsoft.Extensions.Configuration;
 using Facebook;
 using System.IO;
+using System.Text;
 
 namespace LIGHTEX.Controllers
 {
@@ -61,24 +63,28 @@ namespace LIGHTEX.Controllers
             }
             else
             {
+                var sha256 = SHA256.Create();
+                var passwordHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(login.password));
+                var passwordHashString = BitConverter.ToString(passwordHash).Replace("-", "").ToLower();
+
                 // kiểm tra thông tin đăng nhập được cung cấp cho đúng hay không
                 var account = await _context.Account
-                    .Where(a => a.username == login.username && a.password == login.password && a.password != "Account Google" && a.active == true && a.permission == 0)
+                    .Where(a => a.username == login.username && a.password == passwordHashString && a.password != "Account Google" && a.active == true && a.permission == 0)
                     .FirstOrDefaultAsync();
                 var admin = await _context.Account
-                   .Where(a => a.username == login.username && a.password == login.password && a.password != "Account Google" && a.active == true && a.permission == 1)
+                   .Where(a => a.username == login.username && a.password == passwordHashString && a.password != "Account Google" && a.active == true && a.permission == 1)
                    .FirstOrDefaultAsync();
                 var accountGoogle = await _context.Account
-                    .Where(a => a.username == login.username && a.password == login.password && a.password == "Account Google" && a.active == true && a.permission == 0)
+                    .Where(a => a.username == login.username && a.password == passwordHashString && a.password == "Account Google" && a.active == true && a.permission == 0)
                     .FirstOrDefaultAsync();
                 var adminGoogle = await _context.Account
-                   .Where(a => a.username == login.username && a.password == login.password && a.password == "Account Google" && a.active == true && a.permission == 1)
+                   .Where(a => a.username == login.username && a.password == passwordHashString && a.password == "Account Google" && a.active == true && a.permission == 1)
                    .FirstOrDefaultAsync();
                 var accountFacebook = await _context.Account
-                    .Where(a => a.username == login.username && a.password == login.password && a.password == "Account Facebook" && a.active == true && a.permission == 0)
+                    .Where(a => a.username == login.username && a.password == passwordHashString && a.password == "Account Facebook" && a.active == true && a.permission == 0)
                     .FirstOrDefaultAsync();
                 var adminFacebook = await _context.Account
-                   .Where(a => a.username == login.username && a.password == login.password && a.password == "Account Facebook" && a.active == true && a.permission == 1)
+                   .Where(a => a.username == login.username && a.password == passwordHashString && a.password == "Account Facebook" && a.active == true && a.permission == 1)
                    .FirstOrDefaultAsync();
                 if (accountGoogle != null || adminGoogle != null)
                 {

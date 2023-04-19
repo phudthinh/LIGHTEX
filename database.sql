@@ -8,7 +8,7 @@ GO
 CREATE TABLE ACCOUNT
 (
     username NVARCHAR(50) NOT NULL,
-    password NVARCHAR(50) NOT NULL,
+    password NVARCHAR(MAX) NOT NULL,
     full_name NVARCHAR(50) NOT NULL,
     active BIT NOT NULL,
     permission INT NOT NULL,

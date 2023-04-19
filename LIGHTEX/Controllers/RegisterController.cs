@@ -6,11 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authorization;
 using Facebook;
 using System.Security.Claims;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
+using System.Text;
 
 namespace LIGHTEX.Controllers
 {
@@ -65,10 +67,14 @@ namespace LIGHTEX.Controllers
                 }
                 else
                 {
+                    var sha256 = SHA256.Create();
+                    var passwordHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(register.password));
+                    var passwordHashString = BitConverter.ToString(passwordHash).Replace("-", "").ToLower();
+
                     var account = new Account()
                     {
                         username = register.username,
-                        password = register.password,
+                        password = passwordHashString,
                         full_name = register.full_name,
                         active = true,
                         permission = 0,
