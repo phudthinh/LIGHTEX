@@ -177,7 +177,7 @@ namespace LIGHTEX.Controllers
             return Ok();
         }
         [HttpPost]
-        public async Task<IActionResult> CheckoutAsync(int[] selectedCarts, int[] quantities, int payments, int id_customer)
+        public async Task<IActionResult> CheckoutAsync(int[] selectedCarts, int payments, int id_customer)
         {
             var customer = await _context.Customer.FirstOrDefaultAsync(c => c.id_customer == id_customer);
             var totalBill = 0;
@@ -190,17 +190,18 @@ namespace LIGHTEX.Controllers
                     {
                         int cartId = selectedCarts[i];
                         var cart = _context.Cart.FirstOrDefault(c => c.id_cart == cartId);
+                        int quantity = int.Parse(Request.Form["quantities[" + cartId + "]"]);
                         var product = _context.Product.FirstOrDefault(c => c.id_product == cart.id_product);
                         if (cart == null)
                         {
                             continue;
                         }
-                        totalBill = (int)(totalBill + product.price * quantities[i]);
+                        totalBill = (int)(totalBill + product.price * quantity);
                         var bill = new Bill
                         {
                             id_customer = cart.id_customer,
                             id_product = cart.id_product,
-                            quantity = quantities[i],
+                            quantity = quantity,
                             payments = payments,
                             status = 0,
                             ship_date = DateTime.Now.AddDays(3),
@@ -218,12 +219,13 @@ namespace LIGHTEX.Controllers
                     {
                         int cartId = selectedCarts[i];
                         var cart = _context.Cart.FirstOrDefault(c => c.id_cart == cartId);
+                        int quantity = int.Parse(Request.Form["quantities[" + cartId + "]"]);
                         var product = _context.Product.FirstOrDefault(c => c.id_product == cart.id_product);
                         if (cart == null)
                         {
                             continue;
                         }
-                        totalBill = (int)(totalBill + product.price * quantities[i]);
+                        totalBill = (int)(totalBill + product.price * quantity);
                     }
                     if (customer.money >= (double)totalBill)
                     {
@@ -231,6 +233,7 @@ namespace LIGHTEX.Controllers
                         {
                             int cartId = selectedCarts[i];
                             var cart = _context.Cart.FirstOrDefault(c => c.id_cart == cartId);
+                            int quantity = int.Parse(Request.Form["quantities[" + cartId + "]"]);
                             var product = _context.Product.FirstOrDefault(c => c.id_product == cart.id_product);
                             if (cart == null)
                             {
@@ -240,7 +243,7 @@ namespace LIGHTEX.Controllers
                             {
                                 id_customer = cart.id_customer,
                                 id_product = cart.id_product,
-                                quantity = quantities[i],
+                                quantity = quantity,
                                 payments = payments,
                                 status = 0,
                                 ship_date = DateTime.Now.AddDays(3),

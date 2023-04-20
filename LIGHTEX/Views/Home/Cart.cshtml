@@ -58,7 +58,10 @@
                         @foreach (var cart in carts)
                         {
                             <tr class="h-14 w-full last:rounded-b-lg @(count++ % 2 == 0 ? "bg-[#ececec]" : "bg-[#FFFFFF] border-y border-[#cccccc]")">
-                                <td class="w-[10%] px-3 py-1"><div class="w-full flex justify-center items-center"><input type="checkbox" class="check-item h-5 w-5" name="selectedCarts" value="@cart.Cart.id_cart"></div></td>
+                                <td class="w-[10%] px-3 py-1">
+                                    <div class="w-full flex justify-center items-center">
+                                        <input type="checkbox" class="check-item h-5 w-5" name="selectedCarts[]" value="@cart.Cart.id_cart">
+                                </td>
                                 <td class="w-full px-3 py-1 flex gap-2">
                                     <img class="w-20 h-auto" src="data:image/png;base64,@(Convert.ToBase64String(cart.Product.image))" alt="image" />
                                     <div class="flex flex-col h-20">
@@ -71,7 +74,7 @@
                                     <div class="flex items-center justify-start gap-1 md:gap-3">
                                         <div class="px-2 py-1 rounded-md text-center text-white bg-[#6D7CD3] hover:bg-[#4153AD] hover:cursor-pointer cannot__select minusButton">-</div>
                                         <p class="numberItem">@cart.Cart.quantity</p>
-                                        <input type="hidden" name="quantities[]" class="numberItemValue" value="@cart.Cart.quantity" />
+                                        <input type="hidden" name="quantities[@cart.Cart.id_cart]" class="numberItemValue" value="@cart.Cart.quantity" />
                                         <div class="px-2 py-1 rounded-md text-center text-white bg-[#6D7CD3] hover:bg-[#4153AD] hover:cursor-pointer cannot__select plusButton">+</div>
                                     </div>
                                 </td>
@@ -111,6 +114,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+
         const minusButtons = document.querySelectorAll('.minusButton');
         const plusButtons = document.querySelectorAll('.plusButton');
 
