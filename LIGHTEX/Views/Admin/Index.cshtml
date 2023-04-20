@@ -113,9 +113,9 @@
 
 
 }
-<div class="flex flex-col md:flex-row items-center justify-center bg-gray-50 p-4">
-    <div class="flex flex-col w-full lg:w-1/2 h-96">
-        <div class="bg-white shadow-lg rounded-xl flex items-start justify-center py-4 px-8 mx-4 my-2">
+<div class="flex flex-col md:flex-row items-center justify-center bg-gray-50 p-4 gap-4">
+    <div class="flex flex-col w-full lg:w-1/2 h-96 gap-4">
+        <div class="bg-white shadow-lg rounded-xl flex items-start justify-center py-4 px-8 my-2">
                 <div class="flex items-center justify-start w-full">
                     <div class="flex-col w-[85%]">
                         <div class="text-sm font-medium text-[#6D7CD3] my-2">Tổng doanh thu trong ngày</div>
@@ -132,7 +132,7 @@
                     </div>
                 </div>
             </div>
-        <div class="bg-white shadow-lg rounded-xl flex items-start justify-center py-4 px-8 mx-4 my-2">
+        <div class="bg-white shadow-lg rounded-xl flex items-start justify-center py-4 px-8 my-2">
             <div class="flex items-center justify-start w-full">
                 <div class="flex-col w-[85%]">
                     <div class="text-sm font-medium text-[#6D7CD3] my-2">Thu nhập trong tuần</div>
@@ -193,7 +193,7 @@
         </div>
     </div>
     <div class="flex flex-col w-full lg:w-1/2 h-max md:h-96 my-4 md:my-0">
-        <div class="bg-white shadow-lg rounded-xl flex items-start justify-center py-4 px-8 mx-4 my-2">
+        <div class="bg-white shadow-lg rounded-xl flex items-start justify-center py-4 px-8 my-2">
             <div class="flex items-center justify-start w-full">
                 <div class="flex-col w-[100%]">
                     <div class="text-sm font-medium text-[#6D7CD3] my-2">Người dùng mới trong ngày</div>
@@ -243,20 +243,20 @@
         </div>
     </div>
 </div>
-<div class="flex flex-col md:flex-row items-center justify-center bg-gray-50 p-4">
-    <div class="bg-white shadow-lg rounded-xl flex flex-col items-center justify-center py-4 px-8 mx-4 my-2 w-full md:w-[25%] h-48 gap-4">
+<div class="flex grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-center justify-center bg-gray-50 p-4 gap-4">
+    <div class="bg-white shadow-lg rounded-xl flex flex-col items-center justify-center py-4 px-8 my-2 w-full h-48 gap-4">
         <p class="text-xl font-medium text-center">Đơn bán trong ngày</p>
         <h1 class="text-6xl text-[#333333] font-bold text-center">@billSum.Count</h1>
     </div>
-    <div class="bg-[#a9ecbf] shadow-lg rounded-xl flex flex-col items-center justify-center py-4 px-8 mx-4 my-2 w-full md:w-[25%] h-48 gap-4">
+    <div class="bg-[#a9ecbf] shadow-lg rounded-xl flex flex-col items-center justify-center py-4 px-8 my-2 w-full h-48 gap-4">
         <p class="text-xl font-medium text-center text-[#42c16e]">Đơn thành công</p>
         <h1 class="text-6xl text-white font-bold text-center">@billDone.Count</h1>
     </div>
-    <div class="bg-[#f3bbe1] shadow-lg rounded-xl flex flex-col items-center justify-center py-4 px-8 mx-4 my-2 w-full md:w-[25%] h-48 gap-4">
+    <div class="bg-[#f3bbe1] shadow-lg rounded-xl flex flex-col items-center justify-center py-4 px-8 my-2 w-full h-48 gap-4">
         <p class="text-xl font-medium text-center text-[#dc5bb7]">Đơn thất bại</p>
         <h1 class="text-6xl text-white font-bold text-center">@billError.Count</h1>
     </div>
-    <div class="bg-[#6D7CD3] shadow-lg rounded-xl flex flex-col items-center justify-center py-4 px-8 mx-4 my-2 w-full md:w-[25%] h-48 gap-4">
+    <div class="bg-[#6D7CD3] shadow-lg rounded-xl flex flex-col items-center justify-center py-4 px-8 my-2 w-full h-48 gap-4">
         <p class="text-xl font-medium text-center text-white">Người dùng mới</p>
         <h1 class="text-6xl text-white font-bold text-center">@customers.Count</h1>
     </div>

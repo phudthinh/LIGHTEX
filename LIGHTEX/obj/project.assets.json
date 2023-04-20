@@ -4612,19 +4612,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\NC\\.nuget\\packages\\": {}
+    "C:\\Users\\THINH\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\LIGHTEX.csproj",
+      "projectUniqueName": "D:\\ASP.Net\\LIGHTEX\\LIGHTEX\\LIGHTEX.csproj",
       "projectName": "LIGHTEX",
-      "projectPath": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\LIGHTEX.csproj",
-      "packagesPath": "C:\\Users\\NC\\.nuget\\packages\\",
-      "outputPath": "F:\\HTML\\ASP.Net\\LIGHTEX\\LIGHTEX\\obj\\",
+      "projectPath": "D:\\ASP.Net\\LIGHTEX\\LIGHTEX\\LIGHTEX.csproj",
+      "packagesPath": "C:\\Users\\THINH\\.nuget\\packages\\",
+      "outputPath": "D:\\ASP.Net\\LIGHTEX\\LIGHTEX\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\NC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\THINH\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4708,7 +4708,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   },

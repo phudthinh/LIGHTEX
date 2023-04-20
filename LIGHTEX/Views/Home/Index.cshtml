@@ -102,7 +102,7 @@ else
         </nav>
         <div class="swiper-bot w-[85%] h-full flex flex-col justify-between">
             <div class="w-full h-[70%] bg-gradient-to-br from-[#6D7CD3] to-[#4153AD] rounded-t-[3rem] rounded-b-[1rem] relative">
-                <div id="product-image-container" class="absolute left-0 md:left-[5%] lg:left-[45%] duration-1000 transition-all z-50">
+                <div id="product-image-container" class="hidden absolute left-0 md:left-[5%] lg:left-[45%] duration-1000 transition-all z-40">
                     <img id="product-image" class="w-auto h-[400px] md:h-[550px] object-cover" src="data:image/png;base64,@(Convert.ToBase64String(products.FirstOrDefault().Product.image))" />
                 </div>
                 <div class="px-4 md:px-10 lg:px-20 py-12 h-max w-full flex flex-col lg:flex-row absolute bottom-0 md:bottom-0 lg:top-0">
@@ -201,7 +201,7 @@ else
                         </div>
                     </div>
                     <form method="post" enctype="multipart/form-data" class="w-full lg:w-[50%] lg:h-full flex items-center justify-center">
-                        <div class="mt-5 lg:mt-[80%] flex items-center justify-center gap-10">
+                        <div class="mt-5 lg:mt-[75%] flex items-center justify-center gap-10">
                             <div class="flex items-center justify-center gap-3">
                                 <input type="hidden" id="product-idInput" name="id_product" value="@products?.FirstOrDefault().Product.id_product" readonly />
                                 <input type="hidden" id="product-customer" name="id_customer" value="@customer?.id_customer" readonly />
@@ -274,6 +274,7 @@ else
 
     <script>
         var _productEffect = '@products.FirstOrDefault().Product.effect';
+        $('#product-image-container').removeClass('hidden');
         if (_productEffect == '0') {
             $('#product-image-container').addClass('top-[-800px] translate-y-[600px]');
         }
@@ -416,7 +417,7 @@ else
                         $('#product-image-container').addClass('top-[-800px]');
                         $('#product-image').attr('src', productImageSrc);
                         $('#product-image-container').removeClass('translate-y-[-600px]').addClass('translate-y-[600px]');
-                    }, 500);
+                    }, 1000);
                 }
                 if(_productEffect == '1')
                 {

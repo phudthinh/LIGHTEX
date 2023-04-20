@@ -9,157 +9,157 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = LIGHTEX
 build_property.RootNamespace = LIGHTEX
-build_property.ProjectDir = F:\HTML\ASP.Net\LIGHTEX\LIGHTEX\
+build_property.ProjectDir = D:\ASP.Net\LIGHTEX\LIGHTEX\
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = F:\HTML\ASP.Net\LIGHTEX\LIGHTEX
+build_property.MSBuildProjectDirectory = D:\ASP.Net\LIGHTEX\LIGHTEX
 build_property._RazorSourceGeneratorDebug = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Pages/_ValidationScriptsPartial.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Pages/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZhbGlkYXRpb25TY3JpcHRzUGFydGlhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Admin/Index.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Admin/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/BrandManagement/Create.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/BrandManagement/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRNYW5hZ2VtZW50XENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/BrandManagement/Index.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/BrandManagement/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRNYW5hZ2VtZW50XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/BrandManagement/Update.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/BrandManagement/Update.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnJhbmRNYW5hZ2VtZW50XFVwZGF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/CategoryManagement/Create.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/CategoryManagement/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlNYW5hZ2VtZW50XENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/CategoryManagement/Index.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/CategoryManagement/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlNYW5hZ2VtZW50XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/CategoryManagement/Update.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/CategoryManagement/Update.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlNYW5hZ2VtZW50XFVwZGF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/ChangePassword/Index.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/ChangePassword/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hhbmdlUGFzc3dvcmRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/CustomerManagement/Create.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/CustomerManagement/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJNYW5hZ2VtZW50XENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/CustomerManagement/Index.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/CustomerManagement/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJNYW5hZ2VtZW50XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/CustomerManagement/Update.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/CustomerManagement/Update.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJNYW5hZ2VtZW50XFVwZGF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/ErrorData/Index.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/ErrorData/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXJyb3JEYXRhXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/ForgotPassword/Index.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/ForgotPassword/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9yZ290UGFzc3dvcmRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/HistoryManagement/Index.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/HistoryManagement/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGlzdG9yeU1hbmFnZW1lbnRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/Cart.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/Cart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDYXJ0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/ChangePassword.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/ChangePassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDaGFuZ2VQYXNzd29yZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/Comment.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/Comment.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDb21tZW50LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/Index.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/Information.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/Information.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmZvcm1hdGlvbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/Order.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/Order.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxPcmRlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/Pay.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/Pay.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQYXkuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/Thanks.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Home/Thanks.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxUaGFua3MuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Login/Index.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Login/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/OrderManagement/Detail.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/OrderManagement/Detail.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJNYW5hZ2VtZW50XERldGFpbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/OrderManagement/Index.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/OrderManagement/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJNYW5hZ2VtZW50XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/ProductManagement/Create.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/ProductManagement/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdE1hbmFnZW1lbnRcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/ProductManagement/Index.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/ProductManagement/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdE1hbmFnZW1lbnRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/ProductManagement/Update.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/ProductManagement/Update.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdE1hbmFnZW1lbnRcVXBkYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Register/Index.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Register/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVnaXN0ZXJcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Shared/Error.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Shared/_LayoutLogin.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Shared/_LayoutLogin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Shared/_ValidationScriptsPartial.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/_ViewImports.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/_ViewStart.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Shared/_Layout.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-dmelgl3db0
 
-[F:/HTML/ASP.Net/LIGHTEX/LIGHTEX/Views/Shared/_LayoutAdmin.cshtml]
+[D:/ASP.Net/LIGHTEX/LIGHTEX/Views/Shared/_LayoutAdmin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRBZG1pbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = b-fm166efinp

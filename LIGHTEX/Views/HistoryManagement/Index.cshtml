@@ -50,9 +50,9 @@
                 <thead>
                     <tr class="h-14 w-full bg-[#6D7CD3] text-[#FFFFFF]">
                         <th class="w-[35%] px-3 py-1 text-center">Sản phẩm</th>
+                        <th class="w-[20%] px-3 py-1 text-start">Tên</th>
                         <th class="w-[15%] px-3 py-1 hidden md:table-cell text-start">Tổng tiền</th>
                         <th class="w-[15%] px-3 py-1 hidden md:table-cell text-start">Ngày giao</th>
-                        <th class="w-[20%] px-3 py-1 hidden md:table-cell text-start">Hình thức thanh toán</th>
                         <th class="w-[15%] px-3 py-1 text-start">Trạng thái</th>
                     </tr>
                 </thead>
@@ -67,6 +67,9 @@
                                     <p class="hidden md:block overflow-hidden overflow-ellipsis text-justify h-14 pt-2 cart__item-information">@bill.Product.information</p>
                                 </div>
                             </td>
+                            <td class="w-[15%] px-3 py-1">
+                                <p class="overflow-hidden overflow-ellipsis">@bill.Customer.username</p>
+                            </td>
                             <td class="w-[15%] hidden md:table-cell px-3 py-1">
                                 <div class="flex gap-2">
                                     <p class="text-xs overflow-hidden overflow-ellipsis">@bill.Product.price.ToString("N0", CultureInfo.CreateSpecificCulture("de-DE")).Replace(",", ".")đ</p>
@@ -80,17 +83,6 @@
                             </td>
                             <td class="w-[15%] hidden md:table-cell px-3 py-1">
                                 <p class="overflow-hidden overflow-ellipsis">@bill.Bill.ship_date.ToString("dd-MM-yyyy")</p>
-                            </td>
-                            <td class="w-[15%] hidden md:table-cell px-3 py-1">
-                                @if (@bill.Bill.payments == 0)
-                                {
-                                    <p class="overflow-hidden overflow-ellipsis">Khi nhận hàng</p>
-                                }
-                                else if (@bill.Bill.payments == 1)
-                                {
-                                    <p class="overflow-hidden overflow-ellipsis">Ví LIGHTEX</p>
-
-                                }
                             </td>
                             <td class="w-[15%] px-3 py-1">
                                 @if (@bill.Bill.status == 0)
