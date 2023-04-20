@@ -1,0 +1,36 @@
+﻿@model LIGHTEX.Models.CustomerViewModel;
+@{
+    ViewData["Title"] = "Cảm ơn";
+    Layout = "_Layout";
+}
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using System.Security.Claims
+@using LIGHTEX.Data
+@using Microsoft.AspNetCore.Http
+@using System.Diagnostics;
+@using System.Globalization;
+@using System.Linq;
+@using Microsoft.EntityFrameworkCore;
+
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+}
+<body>
+    <div class="h-[90%] w-full m-4">
+        <div class="text-xl flex flex-col justify-center items-center mt-5 md:mt-0">
+            <div class="mt-5 md:mt-20 hover:scale-125 hover:cursor-pointer transition-all">
+                <a asp-area="" asp-controller="Home" asp-action="Index">
+                    <img class="w-atuo h-20" src="~/assets/logo.png" />
+                </a>
+            </div>
+            <h1 class="font-semibold text-3xl text[#333333] mt-10">Chưa có dữ liệu sản phẩm!!</h1>
+            <h1 class="font-semibold text-xl text[#333333] mt-2">Vui lòng vào trang quản trị viên để thêm sản phẩm!!</h1>
+            <div class="w-full flex justify-center mt-8">
+                <a asp-area="" asp-controller="Admin" asp-action="Index" class="px-6 py-2 rounded-md text-white bg-[#FF6827] hover:bg-[#FF6827]/[.9] font-medium">Trang Admin</a>
+            </div>
+            <a asp-area="" asp-controller="Register" asp-action="Index" class="text-sm font-bold text-[#333333] hover:text-[#FF6827] mt-2">
+                Đăng ký tài khoản
+            </a>
+        </div>
+    </div>
+</body>

@@ -136,3 +136,22 @@ CREATE TABLE HISTORY
     FOREIGN KEY (id_product) REFERENCES PRODUCT(id_product)
 );
 GO
+
+CREATE TABLE PRODUCT
+(
+    id_product INT IDENTITY NOT NULL,
+    id_category INT NOT NULL,
+	id_brand INT NOT NULL,
+    name NVARCHAR(50) NOT NULL,
+    information NVARCHAR(500) NOT NULL,
+    price FLOAT DEFAULT 0 NOT NULL,
+    image VARBINARY(MAX) NOT NULL,
+	effect INT DEFAULT 0 NOT NULL,
+    status BIT NOT NULL,
+    create_date DATETIME NOT NULL,
+    modified_date DATETIME NOT NULL,
+    CONSTRAINT PK_PRODUCT_id_product PRIMARY KEY (id_product),
+    FOREIGN KEY (id_category) REFERENCES CATEGORY(id_category),
+	FOREIGN KEY (id_brand) REFERENCES BRAND(id_brand)
+);
+GO

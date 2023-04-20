@@ -15,20 +15,31 @@
 
 @inject IHttpContextAccessor HttpContextAccessor
 @{
+    var id_FirstCategories = 0;
+    var id_FirstProducts = 0;
     var context = HttpContextAccessor?.HttpContext?.RequestServices.GetService(typeof(LIGHTEXContext)) as LIGHTEXContext;
-    var categories = await context.Category.ToListAsync();
-    var categoryFirst = await context.Category.FirstOrDefaultAsync();
     var username = HttpContextAccessor?.HttpContext?.User?.Identity?.Name;
     var account = await context.Account.FirstOrDefaultAsync(c => c.username == username);
     var customer = await context.Customer.FirstOrDefaultAsync(c => c.username == username);
+    var categories = await context.Category.ToListAsync();
+    @if (categories.Count > 0)
+    {
+        id_FirstCategories = categories.FirstOrDefault().id_category;
+    }
+
     var products = await context.Product
                     .Join(context.Brand, p => p.id_brand, b => b.id_brand, (p, b) => new { Product = p, Brand = b })
-                    .Where(pb => pb.Product.id_category == categoryFirst.id_category && pb.Product.status == true)
+                    .Where(pb => pb.Product.id_category == id_FirstCategories && pb.Product.status == true)
                     .ToListAsync();
+
+    @if (products.Count > 0)
+    {
+        id_FirstProducts = products.FirstOrDefault().Product.id_product;
+    }
     var commentList = await context.Comment
     .Join(context.Customer, c => c.id_customer, cu => cu.id_customer, (c, cu) => new { Comment = c, Customer = cu })
     .Join(context.Account, cc => cc.Customer.username, a => a.username, (cc, a) => new { CommentCustomer = cc.Comment, Account = a, Customer = cc.Customer })
-    .Where(ccc => ccc.CommentCustomer.id_product == products.FirstOrDefault().Product.id_product)
+    .Where(ccc => ccc.CommentCustomer.id_product == id_FirstProducts)
     .Select(ccc => new
     {
         Comment = ccc.CommentCustomer,
@@ -42,7 +53,6 @@
     allComments.AddRange(commentList);
     var json = Json.Serialize(allComments);
     var objList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<dynamic>>(json.ToString());
-
 
     var productsSearch = await context.Product
                     .Join(context.Brand, p => p.id_brand, b => b.id_brand, (p, b) => new { Product = p, Brand = b })
@@ -60,11 +70,15 @@
         })
         .ToListAsync();
 }
+@if (categories.Count == 0 || products.Count == 0)
+{
+    <script>
+        window.location.href = "/ErrorData/Index";
+    </script>
+}
+else
+{
 <body>
-    <div id="product-image-container" class="absolute left-[20%] md:left-[30%] lg:left-[55%] duration-1000 transition-all z-50">
-        <img id="product-image" class="w-[300px] md:w-[450px] lg:w-[400px] h-[450px] md:h-[650px] lg:h-[550px] object-cover" src="data:image/png;base64,@(Convert.ToBase64String(products.FirstOrDefault().Product.image))" />
-    </div>
-
     <div class="container mx-auto flex justify-between h-[80vh] mt-10">
         <nav class="swiper-nav flex h-full w-16 md:w-[15%] items-center relative">
             <div class="swiper-container relative flex flex-col justify-center items-start gap-5">
@@ -88,6 +102,9 @@
         </nav>
         <div class="swiper-bot w-[85%] h-full flex flex-col justify-between">
             <div class="w-full h-[70%] bg-gradient-to-br from-[#6D7CD3] to-[#4153AD] rounded-t-[3rem] rounded-b-[1rem] relative">
+                <div id="product-image-container" class="absolute left-0 md:left-[5%] lg:left-[45%] duration-1000 transition-all z-50">
+                    <img id="product-image" class="w-auto h-[400px] md:h-[550px] object-cover" src="data:image/png;base64,@(Convert.ToBase64String(products.FirstOrDefault().Product.image))" />
+                </div>
                 <div class="px-4 md:px-10 lg:px-20 py-12 h-max w-full flex flex-col lg:flex-row absolute bottom-0 md:bottom-0 lg:top-0">
                     <div class="w-full lg:w-[50%]">
                         <p class="hidden" id="product-id">@products.FirstOrDefault().Product.id_product</p>
@@ -189,14 +206,14 @@
                                 <input type="hidden" id="product-idInput" name="id_product" value="@products?.FirstOrDefault().Product.id_product" readonly />
                                 <input type="hidden" id="product-customer" name="id_customer" value="@customer?.id_customer" readonly />
                                 <input type="hidden" id="numberItemInput" name="quantity" value=1 />
-                                <div class="px-3 py-2 rounded-md text-center text-white bg-[#FFFFFF]/[.5] hover:bg-[#FFFFFF]/[.8] font-medium hover:cursor-pointer cannot__select" id="minusButton">-</div>
+                                <div class="px-3 py-2 rounded-md text-center text-white bg-[#FFFFFF]/[.5] hover:bg-[#FFFFFF]/[.8] font-medium hover:cursor-pointer cannot__select z-[60]" id="minusButton">-</div>
                                 <p class="text-2xl font-normal text-start text-[#FFFFFF]" id="numberItem">1</p>
-                                <div class="px-3 py-2 rounded-md text-center text-white bg-[#FFFFFF]/[.5] hover:bg-[#FFFFFF]/[.8] font-medium hover:cursor-pointer cannot__select" id="plusButton">+</div>
+                                <div class="px-3 py-2 rounded-md text-center text-white bg-[#FFFFFF]/[.5] hover:bg-[#FFFFFF]/[.8] font-medium hover:cursor-pointer cannot__select z-[60]" id="plusButton">+</div>
                             </div>
-                            <button type="submit" class="px-4 py-2 rounded-md text-center text-white bg-[#FF6827] hover:bg-[#FF6827]/[.9] font-medium cannot__select hidden lg:block">
+                            <button type="submit" class="px-4 py-2 rounded-md text-center text-white bg-[#FF6827] hover:bg-[#FF6827]/[.9] font-medium cannot__select hidden lg:block z-[60]">
                                 Thêm vào giỏ hàng
                             </button>
-                            <button type="submit" class="px-4 py-2 rounded-md text-center text-white bg-[#FF6827] hover:bg-[#FF6827]/[.9] font-medium cannot__select block lg:hidden">
+                            <button type="submit" class="px-4 py-2 rounded-md text-center text-white bg-[#FF6827] hover:bg-[#FF6827]/[.9] font-medium cannot__select block lg:hidden z-[60]">
                                 Thêm
                             </button>
                         </div>
@@ -258,10 +275,10 @@
     <script>
         var _productEffect = '@products.FirstOrDefault().Product.effect';
         if (_productEffect == '0') {
-            $('#product-image-container').addClass('top-[-700px] md:top-[-850px] lg:top-[-700px] translate-y-[600px]');
+            $('#product-image-container').addClass('top-[-800px] translate-y-[600px]');
         }
         if (_productEffect == '1') {
-            $('#product-image-container').addClass('scale-100');
+            $('#product-image-container').addClass('scale-75');
         }
         var mySwiperNav = new Swiper('.swiper-nav .swiper-container', {
             direction: 'vertical',
@@ -395,7 +412,8 @@
                 if(_productEffect == '0')
                 {
                     setTimeout(function () {
-                        $('#product-image-container').addClass('top-[-700px] md:top-[-850px] lg:top-[-700px]');
+                        $('#product-image-container').removeClass('scale-75');
+                        $('#product-image-container').addClass('top-[-800px]');
                         $('#product-image').attr('src', productImageSrc);
                         $('#product-image-container').removeClass('translate-y-[-600px]').addClass('translate-y-[600px]');
                     }, 500);
@@ -404,23 +422,23 @@
                 {
                     setTimeout(function () {
                         $('#product-image-container').addClass('scale-0')
-                        $('#product-image-container').removeClass('top-[-700px] md:top-[-850px] lg:top-[-700px]');
+                        $('#product-image-container').removeClass('top-[-800px]');
                         $('#product-image-container').removeClass('translate-y-[600px]');
                         $('#product-image-container').removeClass('translate-y-[-600px]');
                         }, 1000);
                     setTimeout(function () {
-                        $('#product-image-container').removeClass('top-[-700px] md:top-[-850px] lg:top-[-700px]');
+                        $('#product-image-container').removeClass('top-[-800px]');
                         $('#product-image-container').removeClass('translate-y-[600px]');
                         $('#product-image-container').removeClass('translate-y-[-600px]');
                         $('#product-image-container').removeClass('scale-0');
                         $('#product-image').attr('src', productImageSrc);
-                        $('#product-image-container').removeClass('scale-0').addClass('scale-100');
+                        $('#product-image-container').removeClass('scale-0').addClass('scale-75');
                     }, 2000);
                 }
 
             }
             if (_productEffect == '1') {
-                $('#product-image-container').removeClass('scale-100').addClass('scale-0');
+                $('#product-image-container').removeClass('scale-75').addClass('scale-0');
                 console.log(_productEffect)
                 _productEffect = productEffect
                 console.log(_productEffect)
@@ -428,9 +446,10 @@
                 if(_productEffect == '0')
                 {
                     setTimeout(function () {
-                        $('#product-image-container').removeClass('scale-0').addClass('scale-100');
+                        $('#product-image-container').removeClass('scale-0');
+                        $('#product-image-container').removeClass('scale-75');
                         $('#product-image').attr('src', productImageSrc);
-                        $('#product-image-container').addClass('top-[-700px] md:top-[-850px] lg:top-[-700px]');
+                        $('#product-image-container').addClass('top-[-800px]');
                         $('#product-image-container').removeClass('translate-y-[-600px]');
                         }, 1000);
                     setTimeout(function () {
@@ -440,13 +459,13 @@
                 if(_productEffect == '1')
                 {
                     setTimeout(function () {
-                        $('#product-image-container').removeClass('top-[-700px] md:top-[-850px] lg:top-[-700px]');
+                        $('#product-image-container').removeClass('top-[-800px]');
                         $('#product-image-container').removeClass('translate-y-[600px]');
                         $('#product-image-container').removeClass('translate-y-[-600px]');
                         }, 1000);
                     setTimeout(function () {
                         $('#product-image').attr('src', productImageSrc);
-                        $('#product-image-container').removeClass('scale-0').addClass('scale-100');
+                        $('#product-image-container').removeClass('scale-0').addClass('scale-75');
                     }, 1500);
                 }
             }
@@ -599,3 +618,4 @@
         });
     </script>
 </body>
+}
